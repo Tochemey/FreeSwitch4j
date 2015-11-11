@@ -16,15 +16,18 @@
 package io.freeswitch.commands;
 
 /**
+ * EventsCommand. Enable or disable events by class or all (plain or xml or json
+ * output format)
+ * 
  * @author Arsene Tochemey GANDOTE
  *
  */
-public class NixEvent extends BaseCommand {
+public class EventsCommand extends BaseCommand {
 
-	public NixEvent(String eventName) {
-		this._command = eventName;
+	public EventsCommand(String eventlist) {
+		this._command = eventlist;
 	}
-	
+
 	@Override
 	public String argument() {
 		return this._command;
@@ -32,7 +35,7 @@ public class NixEvent extends BaseCommand {
 
 	@Override
 	public String command() {
-		return "nixevent";
+		return "events";
 	}
 
 }

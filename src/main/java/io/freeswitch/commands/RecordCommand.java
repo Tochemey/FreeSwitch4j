@@ -16,33 +16,48 @@
 package io.freeswitch.commands;
 
 /**
- * Sleep Pause the channel for a given number of milliseconds, consuming the
- * audio for that period of time. Calling sleep also will consume any
- * outstanding RTP on the operating system's input queue, which can be very
- * useful in situations where audio becomes backlogged.
+ * Record. Record is used to record voice messages, such as in a voicemail
+ * system.
  * 
  * @author Arsene Tochemey GANDOTE
  *
  */
-public class Sleep extends BaseCommand {
+public class RecordCommand extends BaseCommand {
 
 	/**
-	 * number of milliseconds to sleep
+	 * File to record
 	 */
-	private long _duration;
+	public String recordFile;
 
-	public Sleep(long duration) {
-		_duration = 1000 * duration;
+	/**
+	 * how many seconds of audio below silence_thresh will be tolerated before
+	 * the recording stops. When omitted, the default value is 3.
+	 */
+	public long silenceHit;
+
+	/**
+	 * the energy level below which is considered silence.
+	 */
+	public long silenceTreshold;
+
+	/**
+	 * the maximum duration of the recording in seconds.
+	 */
+	public long timeLimit;
+	
+	public RecordCommand() {
+		silenceHit = 3;
 	}
 
 	@Override
 	public String argument() {
-		return String.valueOf(_duration);
+		return String.format("%1s %4d %4d %4d", recordFile, timeLimit,
+				silenceTreshold, silenceHit);
 	}
 
 	@Override
 	public String command() {
-		return "sleep";
+		return "record";
 	}
 
 }

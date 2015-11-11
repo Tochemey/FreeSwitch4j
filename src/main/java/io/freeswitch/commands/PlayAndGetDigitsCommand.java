@@ -22,7 +22,7 @@ package io.freeswitch.commands;
  * @author Arsene Tochemey GANDOTE
  *
  */
-public class PlayAndGetDigits extends BaseCommand {
+public class PlayAndGetDigitsCommand extends BaseCommand {
 
 	/**
 	 * Maximum number of digits to fetch (maximum value of 128)
@@ -78,7 +78,7 @@ public class PlayAndGetDigits extends BaseCommand {
 	 */
 	public String invalidFile;
 
-	public PlayAndGetDigits() {
+	public PlayAndGetDigitsCommand() {
 		maxNumberOfDigits = 128;
 		minNumberOfDigits = 0;
 		terminators = '#';

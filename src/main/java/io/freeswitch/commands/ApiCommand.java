@@ -16,25 +16,25 @@
 package io.freeswitch.commands;
 
 /**
- * ConnectCommand. 
- * This command is used to connect to FreeSwitch to retrieve the
- * details of an inbound call. This function will be used in an application
- * server to which FreeSwitch will connect to via its mode outbound event
- * socket.
+ * ApiCommand. Send an api command (blocking mode)
  * 
  * @author Arsene Tochemey GANDOTE
  *
  */
-public class Connect extends BaseCommand {
+public class ApiCommand extends BaseCommand {
 
-	@Override
-	public String argument() {
-		return "";
+	public ApiCommand(String command) {
+		this._command = command;
 	}
 
 	@Override
 	public String command() {
-		return "connect";
+		return "api";
+	}
+
+	@Override
+	public String argument() {
+		return this._command;
 	}
 
 }

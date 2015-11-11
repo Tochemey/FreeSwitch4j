@@ -21,7 +21,7 @@ package io.freeswitch.commands;
  * @author Arsene Tochemey GANDOTE
  *
  */
-public class SchedApi extends BaseCommand {
+public class SchedApiCommand extends BaseCommand {
 	/**
 	 * The command to schedule
 	 */
@@ -48,7 +48,7 @@ public class SchedApi extends BaseCommand {
 	 */
 	private long _unixTime;
 
-	public SchedApi(BaseCommand command, long time, String groupName,
+	public SchedApiCommand(BaseCommand command, long time, String groupName,
 			boolean async, boolean repetitive) {
 		_command = command;
 		_unixTime = time;

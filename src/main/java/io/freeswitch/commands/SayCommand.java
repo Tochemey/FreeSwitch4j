@@ -29,7 +29,7 @@ import io.freeswitch.SayType;
  * @author Arsene Tochemey GANDOTE
  *
  */
-public class Say extends BaseCommand {
+public class SayCommand extends BaseCommand {
 
 	/**
 	 * Text to read.
@@ -62,7 +62,7 @@ public class Say extends BaseCommand {
 	 */
 	public SayGender gender;
 
-	public Say(String text) {
+	public SayCommand(String text) {
 		_text = text;
 	}
 

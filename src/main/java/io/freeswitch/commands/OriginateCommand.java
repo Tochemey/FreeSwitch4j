@@ -31,7 +31,7 @@ import org.apache.commons.lang3.StringUtils;
  * @author Arsene Tochemey GANDOTE
  *
  */
-public class Originate extends BaseCommand {
+public class OriginateCommand extends BaseCommand {
 
 	/**
 	 * originate channel variables
@@ -56,7 +56,7 @@ public class Originate extends BaseCommand {
 	 */
 	public String option;
 
-	public Originate(IEndPoint destination, IEndPoint application) {
+	public OriginateCommand(IEndPoint destination, IEndPoint application) {
 		_destination = destination;
 		_application = application;
 		_channelVariables = new ArrayList<ChannelVariable>();

@@ -15,51 +15,28 @@
  */
 package io.freeswitch.commands;
 
-import org.apache.commons.lang3.StringUtils;
+import java.util.UUID;
 
 /**
- * Speaks a string or file of text to the channel using the defined speech
- * engine.
- * 
+ * GetVarCommand.
+ * It is used to retrieve a channel variable based upon the channel id
  * @author Arsene Tochemey GANDOTE
  *
  */
-public class Speak extends BaseCommand {
+public class GetVarCommand extends BaseCommand {
 
-	/**
-	 * TTS engine
-	 */
-	public String engine;
-
-	/**
-	 * TTS engine voice
-	 */
-	public String voice;
-
-	/**
-	 * Text to read
-	 */
-	public String text;
-
-	/**
-	 * Timer name
-	 */
-	public String timerName;
-
-	public Speak() {
-		engine = "flite";
-		voice = "kal";
+	public GetVarCommand(UUID channelId, String variable) {
+		this._command = String.format("%s %s", channelId, variable);
 	}
-
+	
 	@Override
 	public String argument() {
-		return engine + "|" + voice + "|" + text
-				+ (!StringUtils.isEmpty(timerName) ? "|" + timerName : "");
+		return this._command;
 	}
 
 	@Override
 	public String command() {
-		return "speak";
+		return "uuid_getvar"; 
 	}
 
 }

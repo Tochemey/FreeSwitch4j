@@ -21,7 +21,7 @@ import java.util.UUID;
  * @author Arsene Tochemey GANDOTE
  *
  */
-public class Execute extends BaseCommand {
+public class SendMsgCommand extends BaseCommand {
 
 	final UUID EMPTY_UUID = new UUID(0L, 0L);
 
@@ -50,7 +50,7 @@ public class Execute extends BaseCommand {
 	 */
 	private int _loop;
 
-	public Execute(UUID channelId, String app, String arg, int loop,
+	public SendMsgCommand(UUID channelId, String app, String arg, int loop,
 			boolean blockingMode) {
 		_channelId = channelId;
 		_application = app;
@@ -59,7 +59,7 @@ public class Execute extends BaseCommand {
 		_eventLock = blockingMode;
 	}
 
-	public Execute(String app, String arg, int loop, boolean blockingMode) {
+	public SendMsgCommand(String app, String arg, int loop, boolean blockingMode) {
 		_channelId = EMPTY_UUID;
 		_application = app;
 		_argument = arg;
@@ -67,7 +67,7 @@ public class Execute extends BaseCommand {
 		_eventLock = blockingMode;
 	}
 
-	public Execute(String app, String arg) {
+	public SendMsgCommand(String app, String arg) {
 		_channelId = EMPTY_UUID;
 		_application = app;
 		_argument = arg;

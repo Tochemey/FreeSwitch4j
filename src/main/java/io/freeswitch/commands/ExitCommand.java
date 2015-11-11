@@ -16,18 +16,12 @@
 package io.freeswitch.commands;
 
 /**
- * Resume. socket_resume: If this variable is set to true, the dialplan will
- * resume execution with the next action after the call to the socket
- * application. This can be used for example to allow you to do something
- * intelligent in the dialplan if your IVR application gets killed in an unclean
- * way. If there is a bridge active when the disconnect happens, it is killed.
- * To do this from your application after the socket is already connected, issue
- * the resume command.
- * 
+ * ExitCommand.
+ * It is used to disconnect from FreeSwitch
  * @author Arsene Tochemey GANDOTE
  *
  */
-public class Resume extends BaseCommand {
+public class ExitCommand extends BaseCommand{
 
 	@Override
 	public String argument() {
@@ -36,7 +30,7 @@ public class Resume extends BaseCommand {
 
 	@Override
 	public String command() {
-		return "resume";
+		 return "exit"; 
 	}
 
 }

@@ -15,27 +15,30 @@
  */
 package io.freeswitch.commands;
 
+import java.util.UUID;
+
 /**
- * EventCommand. Enable or disable events by class or all (plain or xml or json
- * output format)
+ * HangupCommand. It is used to hangup a live call with a specific reason.
  * 
  * @author Arsene Tochemey GANDOTE
  *
  */
-public class Event extends BaseCommand {
+public class HangupCommand extends BaseCommand {
 
-	public Event(String eventlist) {
-		this._command = eventlist;
+	public HangupCommand(UUID channelId, String reason) {
+		this._command = String.format(
+				"sendmsg  %1$s\ncall-command: %2$s\nhangup-cause: %3$s", channelId,
+				"hangup", reason);
 	}
 
 	@Override
 	public String argument() {
-		return this._command;
+		return "";
 	}
 
 	@Override
 	public String command() {
-		return "event";
+		return this._command;
 	}
 
 }

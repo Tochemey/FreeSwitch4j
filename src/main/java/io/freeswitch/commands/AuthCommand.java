@@ -16,20 +16,16 @@
 package io.freeswitch.commands;
 
 /**
- * DivertEventsCommand. The divert_events switch is available to allow events
- * that an embedded script would expect to get in the inputcallback to be
- * diverted to the event socket.
+ * AuthCommand. It is used to send an authentication credentials to freeSwitch
+ * while connected to freeSwitch.
  * 
  * @author Arsene Tochemey GANDOTE
  *
  */
-public class DivertEvents extends BaseCommand {
+public class AuthCommand extends BaseCommand {
 
-	public DivertEvents(boolean on) {
-		if (on)
-			this._command = "on";
-		else
-			this._command = "off";
+	public AuthCommand(String password) {
+		this._command = password;
 	}
 
 	@Override
@@ -39,7 +35,7 @@ public class DivertEvents extends BaseCommand {
 
 	@Override
 	public String command() {
-		return "divert_events";
+		return "auth";
 	}
 
 }

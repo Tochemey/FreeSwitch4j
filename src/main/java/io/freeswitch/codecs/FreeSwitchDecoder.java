@@ -31,8 +31,8 @@ import org.slf4j.LoggerFactory;
  * @author Arsene Tochemey GANDOTE
  * @author  david varnes
  */
-public class EslMessageDecoder extends
-		ReplayingDecoder<EslMessageDecoder.State> {
+public class FreeSwitchDecoder extends
+		ReplayingDecoder<FreeSwitchDecoder.State> {
 
 	/**
 	 * Line feed character
@@ -51,7 +51,7 @@ public class EslMessageDecoder extends
 	/**
 	 * 
 	 */
-	public EslMessageDecoder(int maxHeaderSize) {
+	public FreeSwitchDecoder(int maxHeaderSize) {
 		super(State.READ_HEADER);
 		if (maxHeaderSize <= 0) {
 			throw new IllegalArgumentException(
@@ -61,7 +61,7 @@ public class EslMessageDecoder extends
 		this.maxHeaderSize = maxHeaderSize;
 	}
 
-	public EslMessageDecoder(int maxHeaderSize,
+	public FreeSwitchDecoder(int maxHeaderSize,
 			boolean treatUnknownHeadersAsBody) {
 		this(maxHeaderSize);
 		this.treatUnknownHeadersAsBody = treatUnknownHeadersAsBody;
@@ -131,7 +131,7 @@ public class EslMessageDecoder extends
 			/*
 			 * read the content-length specified
 			 */
-			int contentLength = currentMessage.getContentLength();
+			int contentLength = currentMessage.contentLength();
 			ByteBuf bodyBytes = in.readBytes(contentLength);
 			log.debug("read [{}] body bytes", bodyBytes.writerIndex());
 			// most bodies are line based, so split on LF

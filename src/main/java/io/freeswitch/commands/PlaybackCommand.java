@@ -29,7 +29,7 @@ import org.apache.commons.lang3.StringUtils;
  * @author Arsene Tochemey GANDOTE
  *
  */
-public class Playback extends BaseCommand {
+public class PlaybackCommand extends BaseCommand {
 
 	/**
 	 * Playback channel variables
@@ -50,25 +50,25 @@ public class Playback extends BaseCommand {
 	 */
 	private String _audioFile;
 
-	public Playback() {
+	public PlaybackCommand() {
 		_channelVariables = new ArrayList<ChannelVariable>();
 		_loop = 1;
 		_audioFile = "";
 	}
 
-	public Playback(String audioFile) {
+	public PlaybackCommand(String audioFile) {
 		_audioFile = audioFile;
 		_loop = 1;
 		_channelVariables = new ArrayList<ChannelVariable>();
 	}
 
-	public Playback(String audioFile, List<ChannelVariable> variables) {
+	public PlaybackCommand(String audioFile, List<ChannelVariable> variables) {
 		_audioFile = audioFile;
 		_loop = 1;
 		_channelVariables = variables;
 	}
 
-	public Playback(String audioFile, int loop, List<ChannelVariable> variables) {
+	public PlaybackCommand(String audioFile, int loop, List<ChannelVariable> variables) {
 		_audioFile = audioFile;
 		_loop = loop;
 		_channelVariables = variables;

@@ -15,39 +15,34 @@
  */
 package io.freeswitch.commands;
 
-import java.util.UUID;
-
 /**
- * BgApiCommand. 
- * It is used to Execute an API command in a thread different from
- * the main thread running freeSwitch. In other words it sends an api command
- * (non-blocking mode) this will let you execute a job in the background and the
- * result will be sent as an event with an indicated uuid to match the reply to
- * the command)
+ * Sleep Pause the channel for a given number of milliseconds, consuming the
+ * audio for that period of time. Calling sleep also will consume any
+ * outstanding RTP on the operating system's input queue, which can be very
+ * useful in situations where audio becomes backlogged.
  * 
  * @author Arsene Tochemey GANDOTE
  *
  */
-public class BgApi extends BaseCommand {
+public class SleepCommand extends BaseCommand {
 
 	/**
-	 * The command Id. Each bgapi command can explicitly have an Id since bgapi
-	 * generates a UUID for each command executed on FreeSwitch
+	 * number of milliseconds to sleep
 	 */
-	public UUID CommandId;
+	private long _duration;
 
-	public BgApi(String command, String argument) {
-		this._command = String.format("%s %s", command, argument);
+	public SleepCommand(long duration) {
+		_duration = 1000 * duration;
 	}
 
 	@Override
 	public String argument() {
-		return this._command;
+		return String.valueOf(_duration);
 	}
 
 	@Override
 	public String command() {
-		return "bgapi";
+		return "sleep";
 	}
 
 }

@@ -30,7 +30,7 @@ public class CommandReply {
 	public CommandReply(String command, EslMessage response) {
 		this._command = command;
 		this._response = response;
-		this._replyText = response.getHeaderValue(Name.REPLY_TEXT);
+		this._replyText = response.headerValue(Name.REPLY_TEXT);
 		this._success = _replyText.startsWith("+OK");
 	}
 

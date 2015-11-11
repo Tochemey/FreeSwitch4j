@@ -16,25 +16,26 @@
 package io.freeswitch.commands;
 
 /**
- * ApiCommand. Send an api command (blocking mode)
+ * EventCommand. Enable or disable events by class or all (plain or xml or json
+ * output format)
  * 
  * @author Arsene Tochemey GANDOTE
  *
  */
-public class Api extends BaseCommand {
+public class EventCommand extends BaseCommand {
 
-	public Api(String command) {
-		this._command = command;
-	}
-
-	@Override
-	public String command() {
-		return "api";
+	public EventCommand(String eventlist) {
+		this._command = eventlist;
 	}
 
 	@Override
 	public String argument() {
 		return this._command;
+	}
+
+	@Override
+	public String command() {
+		return "event";
 	}
 
 }

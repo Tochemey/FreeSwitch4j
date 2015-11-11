@@ -15,49 +15,39 @@
  */
 package io.freeswitch.commands;
 
+import java.util.UUID;
+
 /**
- * Record. Record is used to record voice messages, such as in a voicemail
- * system.
+ * BgApiCommand. 
+ * It is used to Execute an API command in a thread different from
+ * the main thread running freeSwitch. In other words it sends an api command
+ * (non-blocking mode) this will let you execute a job in the background and the
+ * result will be sent as an event with an indicated uuid to match the reply to
+ * the command)
  * 
  * @author Arsene Tochemey GANDOTE
  *
  */
-public class Record extends BaseCommand {
+public class BgApiCommand extends BaseCommand {
 
 	/**
-	 * File to record
+	 * The command Id. Each bgapi command can explicitly have an Id since bgapi
+	 * generates a UUID for each command executed on FreeSwitch
 	 */
-	public String recordFile;
+	public UUID CommandId;
 
-	/**
-	 * how many seconds of audio below silence_thresh will be tolerated before
-	 * the recording stops. When omitted, the default value is 3.
-	 */
-	public long silenceHit;
-
-	/**
-	 * the energy level below which is considered silence.
-	 */
-	public long silenceTreshold;
-
-	/**
-	 * the maximum duration of the recording in seconds.
-	 */
-	public long timeLimit;
-	
-	public Record() {
-		silenceHit = 3;
+	public BgApiCommand(String command, String argument) {
+		this._command = String.format("%s %s", command, argument);
 	}
 
 	@Override
 	public String argument() {
-		return String.format("%1s %4d %4d %4d", recordFile, timeLimit,
-				silenceTreshold, silenceHit);
+		return this._command;
 	}
 
 	@Override
 	public String command() {
-		return "record";
+		return "bgapi";
 	}
 
 }

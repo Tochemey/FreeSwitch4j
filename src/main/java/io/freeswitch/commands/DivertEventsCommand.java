@@ -15,30 +15,31 @@
  */
 package io.freeswitch.commands;
 
-import java.util.UUID;
-
 /**
- * HangupCommand. It is used to hangup a live call with a specific reason.
+ * DivertEventsCommand. The divert_events switch is available to allow events
+ * that an embedded script would expect to get in the inputcallback to be
+ * diverted to the event socket.
  * 
  * @author Arsene Tochemey GANDOTE
  *
  */
-public class Hangup extends BaseCommand {
+public class DivertEventsCommand extends BaseCommand {
 
-	public Hangup(UUID channelId, String reason) {
-		this._command = String.format(
-				"sendmsg  %1$s\ncall-command: %2$s\nhangup-cause: %3$s", channelId,
-				"hangup", reason);
+	public DivertEventsCommand(boolean on) {
+		if (on)
+			this._command = "on";
+		else
+			this._command = "off";
 	}
 
 	@Override
 	public String argument() {
-		return "";
+		return this._command;
 	}
 
 	@Override
 	public String command() {
-		return this._command;
+		return "divert_events";
 	}
 
 }

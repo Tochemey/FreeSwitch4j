@@ -18,43 +18,29 @@ package io.freeswitch.commands;
 import java.util.UUID;
 
 /**
- * SetVar.
- * It is used to set channel variable
+ * MyEvents. The 'myevents' subscription allows your inbound socket connection
+ * to behave like an outbound socket connect. It will "lock on" to the events
+ * for a particular uuid and will ignore all other events, closing the socket
+ * when the channel goes away or closing the channel when the socket disconnects
+ * and all applications have finished executing
+ * 
  * @author Arsene Tochemey GANDOTE
  *
  */
-public class SetVar extends BaseCommand {
+public class MyEventsCommand extends BaseCommand {
 
-	/**
-	 * channel Id
-	 */
-	private UUID _channelId;
-
-	/**
-	 * variable name
-	 */
-	private String _name;
-
-	/**
-	 * variable value
-	 */
-	private String _value;
-
-	public SetVar(UUID channelId, String var, String val) {
-		_channelId = channelId;
-		_name = var;
-		_value = val;
+	public MyEventsCommand(UUID channelId) {
+		this._command = channelId.toString();
 	}
 
 	@Override
 	public String argument() {
-		return String.format("%1s %2s %3s", _channelId.toString(), _name,
-				_value);
+		return this._command;
 	}
 
 	@Override
 	public String command() {
-		return "uuid_setvar";
+		return "myevents";
 	}
 
 }

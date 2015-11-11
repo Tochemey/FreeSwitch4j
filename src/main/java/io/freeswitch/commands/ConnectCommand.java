@@ -16,12 +16,16 @@
 package io.freeswitch.commands;
 
 /**
- * ExitCommand.
- * It is used to disconnect from FreeSwitch
+ * ConnectCommand. 
+ * This command is used to connect to FreeSwitch to retrieve the
+ * details of an inbound call. This function will be used in an application
+ * server to which FreeSwitch will connect to via its mode outbound event
+ * socket.
+ * 
  * @author Arsene Tochemey GANDOTE
  *
  */
-public class Exit extends BaseCommand{
+public class ConnectCommand extends BaseCommand {
 
 	@Override
 	public String argument() {
@@ -30,7 +34,7 @@ public class Exit extends BaseCommand{
 
 	@Override
 	public String command() {
-		 return "exit"; 
+		return "connect";
 	}
 
 }
