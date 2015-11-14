@@ -16,4 +16,4 @@ The framework in its current state can be used to interact with FreeSwitch easil
 [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt)
 
 ## **Notes**
-It has not been fully tested. When the tests are done it will be confirmed on this page. Thank you.
+For any support please do send me an email at tochemey@gmail.com
