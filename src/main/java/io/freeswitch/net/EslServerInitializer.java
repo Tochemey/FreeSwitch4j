@@ -33,7 +33,7 @@ public abstract class EslServerInitializer extends
 	protected void initChannel(SocketChannel ch) throws Exception {
 		ChannelPipeline pipeline = ch.pipeline();
 		pipeline.addLast("encoder", new StringEncoder());
-		pipeline.addLast("decoder", new FreeSwitchDecoder(8192, true));		
+		pipeline.addLast("decoder", new FreeSwitchDecoder(8192, true));	
 		pipeline.addLast("clientHandler", buildHandler());
 	}
 

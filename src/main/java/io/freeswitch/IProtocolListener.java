@@ -19,7 +19,7 @@ import io.freeswitch.events.EslEvent;
 import io.freeswitch.message.CommandReply;
 
 /**
- * End users of the {@link Client} should not need to use this class. 
+ * End users of the {@link EslClient} should not need to use this class. 
  * @author Arsene Tochemey GANDOTE
  *
  */

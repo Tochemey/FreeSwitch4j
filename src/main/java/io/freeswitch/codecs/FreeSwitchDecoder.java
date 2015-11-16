@@ -18,6 +18,7 @@ package io.freeswitch.codecs;
 import io.freeswitch.message.EslHeaders.Name;
 import io.freeswitch.message.EslMessage;
 import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ReplayingDecoder;
 import io.netty.handler.codec.TooLongFrameException;
@@ -31,6 +32,7 @@ import org.slf4j.LoggerFactory;
  * @author Arsene Tochemey GANDOTE
  * @author  david varnes
  */
+@Sharable
 public class FreeSwitchDecoder extends
 		ReplayingDecoder<FreeSwitchDecoder.State> {
 

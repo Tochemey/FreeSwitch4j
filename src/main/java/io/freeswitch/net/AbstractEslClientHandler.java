@@ -15,12 +15,12 @@
  */
 package io.freeswitch.net;
 
-import io.freeswitch.commands.ConnectCommand;
 import io.freeswitch.events.EslEvent;
 import io.freeswitch.message.EslHeaders.Name;
 import io.freeswitch.message.EslHeaders.Value;
 import io.freeswitch.message.EslMessage;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -37,10 +37,24 @@ import org.slf4j.LoggerFactory;
 
 /**
  * @author Arsene Tochemey GANDOTE
- *
+ * @author david varnes
  */
-public abstract class AbstractEslServerHandler extends
+public abstract class AbstractEslClientHandler extends
         SimpleChannelInboundHandler<Object> {
+
+    public static final String MESSAGE_TERMINATOR = "\n\n";
+    public static final String LINE_TERMINATOR = "\n";
+
+    protected final Logger log = LoggerFactory.getLogger(this.getClass());
+
+    private final Lock syncLock = new ReentrantLock();
+    private final Queue<SyncCallback> syncCallbacks = new ConcurrentLinkedQueue<SyncCallback>();
+
+    /**
+     *
+     */
+    public AbstractEslClientHandler() {
+    }
 
     private static class SyncCallback {
 
@@ -79,65 +93,8 @@ public abstract class AbstractEslServerHandler extends
         }
     }
 
-    public static final String MESSAGE_TERMINATOR = "\n\n";
-
-    public static final String LINE_TERMINATOR = "\n";
-
-    protected final Logger log = LoggerFactory.getLogger(this.getClass());
-    private final Lock syncLock = new ReentrantLock();
-
-    private final Queue<SyncCallback> syncCallbacks = new ConcurrentLinkedQueue<SyncCallback>();
-
-    public AbstractEslServerHandler() {
-    }
-
-    /**
-     * @param autoRelease
-     */
-    public AbstractEslServerHandler(boolean autoRelease) {
-        super(autoRelease);
-    }
-
-    /**
-     * @param inboundMessageType
-     */
-    public AbstractEslServerHandler(
-            Class<? extends Object> inboundMessageType) {
-        super(inboundMessageType);
-    }
-
-    /**
-     * @param inboundMessageType
-     * @param autoRelease
-     */
-    public AbstractEslServerHandler(
-            Class<? extends Object> inboundMessageType, boolean autoRelease) {
-        super(inboundMessageType, autoRelease);
-    }
-
     @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        super.channelActive(ctx);
-
-        Channel channel = ctx.channel();
-        // Have received a connection from FreeSWITCH server, send connect
-        // response
-        log.debug(
-                "Received new connection from server [{}], sending connect message",
-                channel.localAddress().toString());
-        ConnectCommand connect = new ConnectCommand();
-        EslMessage response = sendSyncSingleLineCommand(ctx.channel(),
-                connect.toString());
-        // The message decoder for outbound, treats most of this incoming
-        // message as an 'event' in
-        // message body, so it parse now
-        EslEvent channelDataEvent = new EslEvent(response, true);
-        // Let implementing sub classes choose what to do next
-        handleConnectResponse(ctx, channelDataEvent);
-    }
-
-    @Override
-    public void channelRead0(ChannelHandlerContext ctx, Object msg)
+    protected void channelRead0(ChannelHandlerContext ctx, Object msg)
             throws Exception {
         if (msg instanceof EslMessage) {
             EslMessage message = (EslMessage) msg;
@@ -156,19 +113,12 @@ public abstract class AbstractEslServerHandler extends
                 + msg.getClass());
     }
 
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        handleException(ctx, cause);
-        ctx.close();
-    }
-
-    protected abstract void handleConnectResponse(ChannelHandlerContext ctx,
-            EslEvent event);
-
-    protected abstract void handleDisconnectionNotice();
-
     protected abstract void handleEslEvent(ChannelHandlerContext ctx,
             EslEvent event);
+
+    protected abstract void handleAuthRequest(ChannelHandlerContext ctx);
+
+    protected abstract void handleDisconnectionNotice();
 
     protected void handleEslMessage(ChannelHandlerContext ctx,
             EslMessage message) {
@@ -181,6 +131,9 @@ public abstract class AbstractEslServerHandler extends
         } else if (contentType.equals(Value.COMMAND_REPLY)) {
             log.debug("Command reply received [{}]", message);
             syncCallbacks.poll().handle(message);
+        } else if (contentType.equals(Value.AUTH_REQUEST)) {
+            log.debug("Auth request received [{}]", message);
+            handleAuthRequest(ctx);
         } else if (contentType.equals(Value.TEXT_DISCONNECT_NOTICE)) {
             log.debug("Disconnect notice received [{}]", message);
             handleDisconnectionNotice();
@@ -189,32 +142,41 @@ public abstract class AbstractEslServerHandler extends
         }
     }
 
-    protected abstract void handleException(ChannelHandlerContext ctx,
-            Throwable cause);
-
     /**
-     * Returns the Job UUID of that the response event will have.
+     * Synthesise a synchronous command/response by creating a callback object
+     * which is placed in queue and blocks waiting for another IO thread to
+     * process an incoming {@link EslMessage} and attach it to the callback.
      *
      * @param channel
-     * @param command
-     * @return Job-UUID as a string
+     * @param command single string to send
+     * @return the {@link EslMessage} attached to this command's callback
      */
-    public String sendAsyncCommand(Channel channel, final String command) {
-        /*
-         * Send synchronously to get the Job-UUID to return, the results of the
-         * actual job request will be returned by the server as an async event.
-         */
-        EslMessage response = sendSyncSingleLineCommand(channel, command);
-        if (response.hasHeader(Name.JOB_UUID)) {
-            return response.headerValue(Name.JOB_UUID);
-        } else {
-            throw new IllegalStateException(
-                    "Missing Job-UUID header in bgapi response");
+    public EslMessage sendSyncSingleLineCommand(Channel channel,
+            final String command) {
+        SyncCallback callback = new SyncCallback();
+        syncLock.lock();
+        try {
+            syncCallbacks.add(callback);
+            String request = command + MESSAGE_TERMINATOR;
+            log.debug("Command sent to freeSwitch [{}]", request);
+            ChannelFuture future = channel.writeAndFlush(request);
+            future.awaitUninterruptibly();
+            // Now we are sure the future is completed.
+            assert future.isDone();
+
+            if (!future.isSuccess()) {
+                log.warn("Error [{}]", future.cause());
+            }
+        } finally {
+            syncLock.unlock();
         }
+
+        // Block until the response is available
+        return callback.get();
     }
 
     /**
-     * synthesize a synchronous command/response by creating a callback object
+     * Synthesise a synchronous command/response by creating a callback object
      * which is placed in queue and blocks waiting for another IO thread to
      * process an incoming {@link EslMessage} and attach it to the callback.
      *
@@ -246,27 +208,24 @@ public abstract class AbstractEslServerHandler extends
     }
 
     /**
-     * Synthesise a synchronous command/response by creating a callback object
-     * which is placed in queue and blocks waiting for another IO thread to
-     * process an incoming {@link EslMessage} and attach it to the callback.
+     * Returns the Job UUID of that the response event will have.
      *
      * @param channel
-     * @param command single string to send
-     * @return the {@link EslMessage} attached to this command's callback
+     * @param command
+     * @return Job-UUID as a string
      */
-    public EslMessage sendSyncSingleLineCommand(Channel channel,
-            final String command) {
-        SyncCallback callback = new SyncCallback();
-        syncLock.lock();
-        try {
-            syncCallbacks.add(callback);
-            channel.writeAndFlush(command + MESSAGE_TERMINATOR);
-        } finally {
-            syncLock.unlock();
+    public String sendAsyncCommand(Channel channel, final String command) {
+        /*
+         * Send synchronously to get the Job-UUID to return, the results of the
+         * actual job request will be returned by the server as an async event.
+         */
+        EslMessage response = sendSyncSingleLineCommand(channel, command);
+        if (response.hasHeader(Name.JOB_UUID)) {
+            return response.headerValue(Name.JOB_UUID);
+        } else {
+            throw new IllegalStateException(
+                    "Missing Job-UUID header in bgapi response");
         }
-
-        // Block until the response is available
-        return callback.get();
     }
 
 }

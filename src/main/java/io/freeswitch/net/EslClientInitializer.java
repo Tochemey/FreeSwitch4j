@@ -21,31 +21,32 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.string.StringEncoder;
+import io.netty.util.CharsetUtil;
 
 /**
  * @author Arsene Tochemey GANDOTE
  *
  */
-public class ClientInitializer extends ChannelInitializer<SocketChannel> {
+public class EslClientInitializer extends ChannelInitializer<SocketChannel> {
 
-	private final ChannelHandler handler;
+    private final ChannelHandler handler;
 
-	public ClientInitializer(ChannelHandler handler) {
-		this.handler = handler;
-	}
+    public EslClientInitializer(ChannelHandler handler) {
+        this.handler = handler;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * io.netty.channel.ChannelInitializer#initChannel(io.netty.channel.Channel)
-	 */
-	@Override
-	protected void initChannel(SocketChannel ch) throws Exception {
-		ChannelPipeline pipeline = ch.pipeline();
-		pipeline.addLast("encoder", new StringEncoder());
-		pipeline.addLast("decoder", new FreeSwitchDecoder(8192));		
-		pipeline.addLast("clientHandler", handler);
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * io.netty.channel.ChannelInitializer#initChannel(io.netty.channel.Channel)
+     */
+    @Override
+    protected void initChannel(SocketChannel ch) throws Exception {
+        ChannelPipeline pipeline = ch.pipeline();
+        pipeline.addLast("decoder", new FreeSwitchDecoder(8192));
+        pipeline.addLast("encoder", new StringEncoder());
+        pipeline.addLast("clientHandler", handler);
+    }
 
 }

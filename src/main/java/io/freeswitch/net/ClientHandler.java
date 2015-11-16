@@ -22,47 +22,48 @@ import io.freeswitch.message.CommandReply;
 import io.freeswitch.message.EslHeaders.Value;
 import io.freeswitch.message.EslMessage;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelHandler.Sharable;
 
 /**
  * @author Arsene Tochemey GANDOTE
  *
  */
-public class ClientHandler extends AbstractClientHandler {
+public class ClientHandler extends AbstractEslClientHandler {
 
-	private final String password;
-	private final IProtocolListener listener;
+    private final String password;
+    private final IProtocolListener listener;
 
-	public ClientHandler(String password, IProtocolListener listener) {
-		this.password = password;
-		this.listener = listener;
-	}
+    public ClientHandler(String password, IProtocolListener listener) {
+        this.password = password;
+        this.listener = listener;
+    }
 
-	@Override
-	protected void handleEslEvent(ChannelHandlerContext ctx, EslEvent event) {
-		log.debug("Received event: [{}]", event);
-		listener.eventReceived(event);
-	}
+    @Override
+    protected void handleEslEvent(ChannelHandlerContext ctx, EslEvent event) {
+        log.debug("Received event: [{}]", event);
+        listener.eventReceived(event);
+    }
 
-	@Override
-	protected void handleAuthRequest(ChannelHandlerContext ctx) {
-		log.debug("Auth requested, sending [auth {}]", "*****");
-		AuthCommand auth = new AuthCommand(password);
-		EslMessage response = sendSyncSingleLineCommand(ctx.channel(), auth.toString());
-		log.debug("Auth response [{}]", response);
-		if (response.contentType().equals(Value.COMMAND_REPLY)) {
-			CommandReply commandResponse = new CommandReply("auth " + password,
-					response);
-			listener.authResponseReceived(commandResponse);
-		} else {
-			log.error("Bad auth response message [{}]", response);
-			throw new IllegalStateException("Incorrect auth response");
-		}
-	}
+    @Override
+    protected void handleAuthRequest(ChannelHandlerContext ctx) {
+        log.debug("Auth requested, sending [auth {}]", "*****");
+        AuthCommand auth = new AuthCommand(password);
+        EslMessage response = sendSyncSingleLineCommand(ctx.channel(), auth.toString());
+        log.debug("Auth response [{}]", response);
+        if (response.contentType().equals(Value.COMMAND_REPLY)) {
+            CommandReply commandResponse = new CommandReply("auth " + password,
+                    response);
+            listener.authResponseReceived(commandResponse);
+        } else {
+            log.error("Bad auth response message [{}]", response);
+            throw new IllegalStateException("Incorrect auth response");
+        }
+    }
 
-	@Override
-	protected void handleDisconnectionNotice() {
-		log.debug("Received disconnection notice");
-		listener.disconnected();
-	}
+    @Override
+    protected void handleDisconnectionNotice() {
+        log.debug("Received disconnection notice");
+        listener.disconnected();
+    }
 
 }
