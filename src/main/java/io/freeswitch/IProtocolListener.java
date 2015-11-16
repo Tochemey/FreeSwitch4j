@@ -19,29 +19,29 @@ import io.freeswitch.events.EslEvent;
 import io.freeswitch.message.CommandReply;
 
 /**
- * End users of the {@link EslClient} should not need to use this class. 
+ * End users of the {@link EslClient} should not need to use this class.
+ *
  * @author Arsene Tochemey GANDOTE
  *
  */
 public interface IProtocolListener {
 
-	/**
-	 * Raised when authentication response is received
-	 * 
-	 * @param response
-	 */
-	void authResponseReceived(CommandReply response);
+    /**
+     * Raised when authentication response is received
+     *
+     * @param response
+     */
+    void authResponseReceived(CommandReply response);
 
-	/**
-	 * Raised whenever an event is received from FreeSwitch
-	 * 
-	 * @param event
-	 *            FreeSwitch event
-	 */
-	void eventReceived(EslEvent event);
+    /**
+     * Raised whenever an event is received from FreeSwitch
+     *
+     * @param event FreeSwitch event
+     */
+    void eventReceived(EslEvent event);
 
-	/**
-	 * Raised when the client is disconnected.
-	 */
-	void disconnected();
+    /**
+     * Raised when the client is disconnected.
+     */
+    void disconnected();
 }

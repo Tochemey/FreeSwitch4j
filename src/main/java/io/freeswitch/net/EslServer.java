@@ -15,16 +15,15 @@
  */
 package io.freeswitch.net;
 
-import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.logging.LogLevel;
-import io.netty.handler.logging.LoggingHandler;
-
 import java.net.InetSocketAddress;
+import java.util.concurrent.Executors;
+import org.jboss.netty.bootstrap.ServerBootstrap;
+import org.jboss.netty.channel.Channel;
+import org.jboss.netty.channel.ChannelFactory;
+import org.jboss.netty.channel.group.ChannelGroup;
+import org.jboss.netty.channel.group.ChannelGroupFuture;
+import org.jboss.netty.channel.group.DefaultChannelGroup;
+import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,70 +39,61 @@ import org.slf4j.LoggerFactory;
  * <p>
  * See <a href="http://wiki.freeswitch.org/wiki/Mod_event_socket">http://wiki.
  * freeswitch.org/wiki/Mod_event_socket</a>
- * 
+ *
  * @author Arsene Tochemey GANDOTE
  *
  */
 public class EslServer {
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	/**
-	 * Binding port.
-	 */
-	private final int port;
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	private final int backlog;
+    /**
+     * Binding port.
+     */
+    private final int port;
+    private final ChannelGroup allChannels = new DefaultChannelGroup("esl-socket-server");
 
-	private final ServerBootstrap bootstrap = new ServerBootstrap();
+    private final ChannelFactory channelFactory;
+    private final EslServerPipelineFactory pipelineFactory;
 
-	private final EventLoopGroup bossGroup;
-	private final EventLoopGroup workerGroup;
+    /**
+     *
+     */
+    public EslServer(int port,
+            EslServerPipelineFactory pipelineFactory) {
+        this.port = port;
+        this.pipelineFactory = pipelineFactory;
+        this.channelFactory = new NioServerSocketChannelFactory(
+                Executors.newCachedThreadPool(),
+                Executors.newCachedThreadPool());
+    }
 
-	private ChannelFuture future;
+    /**
+     * start()
+     *
+     * @throws InterruptedException
+     */
+    public void start() throws InterruptedException {
+        ServerBootstrap bootstrap = new ServerBootstrap(channelFactory);
 
-	/**
-	 * 
-	 */
-	public EslServer(int port, int backlog,
-			EslServerInitializer socketClientInitializer) {
-		this.port = port;
-		this.backlog = backlog;
-		this.bossGroup = new NioEventLoopGroup();
-		this.workerGroup = new NioEventLoopGroup();
-		bootstrap.group(bossGroup, workerGroup);
-		bootstrap.channel(NioServerSocketChannel.class);
-		bootstrap.option(ChannelOption.SO_BACKLOG, this.backlog);
-		bootstrap.childOption(ChannelOption.SO_LINGER, 1);
-		bootstrap.childOption(ChannelOption.TCP_NODELAY, true);
-		bootstrap.childOption(ChannelOption.SO_KEEPALIVE, true);
-		bootstrap.handler(new LoggingHandler(LogLevel.INFO));
-		bootstrap.childHandler(socketClientInitializer);
-	}
+        bootstrap.setPipelineFactory(pipelineFactory);
+        bootstrap.setOption("child.tcpNoDelay", true);
+        bootstrap.setOption("child.keepAlive", true);
+        Channel serverChannel = bootstrap.bind(new InetSocketAddress(port));
+        allChannels.add(serverChannel);
+        log.info("SocketClient waiting for connections on port [{}] ...", port);
+    }
 
-	/**
-	 * start()
-	 * 
-	 * @throws InterruptedException
-	 */
-	public void start() throws InterruptedException {
-
-		future = this.bootstrap.bind(new InetSocketAddress(port)).sync();
-		log.info("SocketClient waiting for connections on port [{}] ...", port);
-	}
-
-	/**
-	 * stop()
-	 * @throws InterruptedException
-	 */
-	public void stop() throws InterruptedException {
-		// Wait until the server socket is closed.
-		future.channel().closeFuture().sync();
-		// Shut down all event loops to terminate all threads.
-		bossGroup.shutdownGracefully();
-		workerGroup.shutdownGracefully();
-
-		// Wait until all threads are terminated.
-		bossGroup.terminationFuture().sync();
-		workerGroup.terminationFuture().sync();
-	}
+    /**
+     * stop()
+     *
+     * @throws InterruptedException
+     */
+    public void stop() throws InterruptedException {
+        // Wait until the server socket is closed.
+        ChannelGroupFuture future = allChannels.close();
+        future.awaitUninterruptibly();
+        channelFactory.releaseExternalResources();
+        log.info("SocketClient stopped");
+    }
 }

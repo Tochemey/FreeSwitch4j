@@ -71,10 +71,10 @@ public class EslClientTest {
         // client.setEventSubscriptions( "plain",
         // "heartbeat CHANNEL_CREATE CHANNEL_DESTROY BACKGROUND_JOB" );
         client.event("plain", "all");
-        client.event("Event-Name", "heartbeat");
+        client.filter("Event-Name", "heartbeat");
         client.noevents();
         client.event("plain", "all");
-        client.event("Event-Name", "heartbeat");
+        client.filter("Event-Name", "heartbeat");
         client.filter("Event-Name", "channel_create");
         client.filter("Event-Name", "background_job");
         EslMessage response = client.api("sofia status", "");

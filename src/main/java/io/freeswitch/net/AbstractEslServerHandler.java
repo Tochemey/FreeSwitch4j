@@ -20,10 +20,6 @@ import io.freeswitch.events.EslEvent;
 import io.freeswitch.message.EslHeaders.Name;
 import io.freeswitch.message.EslHeaders.Value;
 import io.freeswitch.message.EslMessage;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandler;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
 
 import java.util.List;
 import java.util.Queue;
@@ -31,6 +27,12 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import org.jboss.netty.channel.Channel;
+import org.jboss.netty.channel.ChannelHandlerContext;
+import org.jboss.netty.channel.ChannelStateEvent;
+import org.jboss.netty.channel.ExceptionEvent;
+import org.jboss.netty.channel.MessageEvent;
+import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,8 +41,7 @@ import org.slf4j.LoggerFactory;
  * @author Arsene Tochemey GANDOTE
  *
  */
-public abstract class AbstractEslServerHandler extends
-        SimpleChannelInboundHandler<Object> {
+public abstract class AbstractEslServerHandler extends SimpleChannelUpstreamHandler {
 
     private static class SyncCallback {
 
@@ -88,45 +89,17 @@ public abstract class AbstractEslServerHandler extends
 
     private final Queue<SyncCallback> syncCallbacks = new ConcurrentLinkedQueue<SyncCallback>();
 
-    public AbstractEslServerHandler() {
-    }
-
-    /**
-     * @param autoRelease
-     */
-    public AbstractEslServerHandler(boolean autoRelease) {
-        super(autoRelease);
-    }
-
-    /**
-     * @param inboundMessageType
-     */
-    public AbstractEslServerHandler(
-            Class<? extends Object> inboundMessageType) {
-        super(inboundMessageType);
-    }
-
-    /**
-     * @param inboundMessageType
-     * @param autoRelease
-     */
-    public AbstractEslServerHandler(
-            Class<? extends Object> inboundMessageType, boolean autoRelease) {
-        super(inboundMessageType, autoRelease);
-    }
-
     @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        super.channelActive(ctx);
+    public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
 
-        Channel channel = ctx.channel();
+        Channel channel = ctx.getChannel();
         // Have received a connection from FreeSWITCH server, send connect
         // response
         log.debug(
                 "Received new connection from server [{}], sending connect message",
-                channel.localAddress().toString());
+                channel.getLocalAddress().toString());
         ConnectCommand connect = new ConnectCommand();
-        EslMessage response = sendSyncSingleLineCommand(ctx.channel(),
+        EslMessage response = sendSyncSingleLineCommand(ctx.getChannel(),
                 connect.toString());
         // The message decoder for outbound, treats most of this incoming
         // message as an 'event' in
@@ -137,10 +110,10 @@ public abstract class AbstractEslServerHandler extends
     }
 
     @Override
-    public void channelRead0(ChannelHandlerContext ctx, Object msg)
+    public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
             throws Exception {
-        if (msg instanceof EslMessage) {
-            EslMessage message = (EslMessage) msg;
+        if (e.getMessage() instanceof EslMessage) {
+            EslMessage message = (EslMessage) e.getMessage();
             String contentType = message.contentType();
             if (contentType.equals(Value.TEXT_EVENT_PLAIN)
                     || contentType.equals(Value.TEXT_EVENT_XML)) {
@@ -148,18 +121,17 @@ public abstract class AbstractEslServerHandler extends
                 EslEvent eslEvent = new EslEvent(message);
                 handleEslEvent(ctx, eslEvent);
             } else {
-                handleEslMessage(ctx, (EslMessage) msg);
+                handleEslMessage(ctx, (EslMessage) e.getMessage());
             }
             return;
         }
         throw new IllegalStateException("Unexpected message type: "
-                + msg.getClass());
+                + e.getMessage().getClass());
     }
 
     @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        handleException(ctx, cause);
-        ctx.close();
+    public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
+        handleException(ctx, e.getCause());
     }
 
     protected abstract void handleConnectResponse(ChannelHandlerContext ctx,
@@ -236,7 +208,7 @@ public abstract class AbstractEslServerHandler extends
         syncLock.lock();
         try {
             syncCallbacks.add(callback);
-            channel.writeAndFlush(sb.toString());
+            channel.write(sb.toString());
         } finally {
             syncLock.unlock();
         }
@@ -260,7 +232,7 @@ public abstract class AbstractEslServerHandler extends
         syncLock.lock();
         try {
             syncCallbacks.add(callback);
-            channel.writeAndFlush(command + MESSAGE_TERMINATOR);
+            channel.write(command + MESSAGE_TERMINATOR);
         } finally {
             syncLock.unlock();
         }

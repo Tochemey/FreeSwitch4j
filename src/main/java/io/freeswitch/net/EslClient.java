@@ -30,13 +30,7 @@ import io.freeswitch.events.EslEvent;
 import io.freeswitch.events.IEventsListener;
 import io.freeswitch.message.CommandReply;
 import io.freeswitch.message.EslMessage;
-import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.nio.NioSocketChannel;
+import java.net.InetSocketAddress;
 
 import java.util.List;
 import java.util.UUID;
@@ -44,10 +38,15 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jboss.netty.bootstrap.ClientBootstrap;
+import org.jboss.netty.channel.Channel;
+import org.jboss.netty.channel.ChannelFuture;
+import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -172,7 +171,7 @@ public class EslClient {
      */
     public EslMessage api(String command, String arg) {
         checkConnected();
-        ClientHandler handler = (ClientHandler) channel.pipeline().last();
+        ClientHandler handler = (ClientHandler) channel.getPipeline().getLast();
 
         StringBuilder sb = new StringBuilder();
         if (!StringUtils.isEmpty(command)) {
@@ -207,7 +206,7 @@ public class EslClient {
      */
     public UUID bgApi(String command, String arg) {
         checkConnected();
-        ClientHandler handler = (ClientHandler) channel.pipeline().last();
+        ClientHandler handler = (ClientHandler) channel.getPipeline().getLast();
         if (StringUtils.isEmpty(command)) {
             // Here no command is set to be executed.
             return null;
@@ -219,7 +218,7 @@ public class EslClient {
     }
 
     public boolean canSend() {
-        return channel != null && channel.isActive() && authenticated;
+        return channel != null && channel.isConnected() && authenticated;
     }
 
     /**
@@ -240,7 +239,7 @@ public class EslClient {
      */
     public CommandReply close() {
         checkConnected();
-        ClientHandler handler = (ClientHandler) channel.pipeline().last();
+        ClientHandler handler = (ClientHandler) channel.getPipeline().getLast();
         ExitCommand exit = new ExitCommand();
         EslMessage response = handler.sendSyncSingleLineCommand(channel,
                 exit.toString());
@@ -266,43 +265,40 @@ public class EslClient {
      */
     public void connect(String host, int port, String password,
             int timeoutSeconds) throws ConnectionFailure, InterruptedException {
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
 
         // If already connected, disconnect first
         if (canSend()) {
             close();
         }
 
-        Bootstrap bootstrap = new Bootstrap();
-        bootstrap.group(workerGroup);
-        bootstrap.channel(NioSocketChannel.class);
-        bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
+        // Configure this client
+        ClientBootstrap bootstrap = new ClientBootstrap(
+                new NioClientSocketChannelFactory(
+                        Executors.newCachedThreadPool(),
+                        Executors.newCachedThreadPool()));
 
         // Add ESL handler
         ClientHandler handler = new ClientHandler(password, protocolListener);
-        bootstrap.handler(new EslClientInitializer(handler));
+        bootstrap.setPipelineFactory(new EslClientPipelineFactory(handler));
 
         // Make the connection attempt.
-        bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS,
-                1000 * timeoutSeconds);
-        bootstrap.remoteAddress(host, port);
-        ChannelFuture future = bootstrap.connect();
-        future.awaitUninterruptibly();
+        ChannelFuture future = bootstrap.connect(new InetSocketAddress(host, port));
 
-        // Now we are sure the future is completed.
-        assert future.isDone();
+        // Wait till attempt succeeds, fails or timeouts
+        if (!future.awaitUninterruptibly(timeoutSeconds, TimeUnit.SECONDS)) {
+            throw new ConnectionFailure("Timeout connecting to " + host + ":" + port);
+        }
 
         // But may have failed anyway
         if (!future.isSuccess()) {
             log.warn("Failed to connect to [{}:{}]", host, port);
             channel = null;
-            workerGroup.shutdownGracefully().awaitUninterruptibly();
-            workerGroup.terminationFuture().awaitUninterruptibly();
+            bootstrap.releaseExternalResources();
             throw new ConnectionFailure("Could not connect to " + host + ":"
-                    + port, future.cause());
+                    + port, future.getCause());
         }
 
-        channel = future.channel();
+        channel = future.getChannel();
         // Wait for the authentication handshake to call back
         while (!authenticatorResponded.get()) {
             try {
@@ -345,7 +341,7 @@ public class EslClient {
         }
 
         checkConnected();
-        ClientHandler handler = (ClientHandler) channel.pipeline().last();
+        ClientHandler handler = (ClientHandler) channel.getPipeline().getLast();
         StringBuilder sb = new StringBuilder();
         if (format != null && !format.isEmpty()) {
             sb.append(format);
@@ -374,7 +370,7 @@ public class EslClient {
      */
     public CommandReply execute(SendMsgCommand sendMsg) {
         checkConnected();
-        ClientHandler handler = (ClientHandler) channel.pipeline().last();
+        ClientHandler handler = (ClientHandler) channel.getPipeline().getLast();
         EslMessage response = handler.sendSyncSingleLineCommand(channel,
                 sendMsg.toString());
 
@@ -401,7 +397,7 @@ public class EslClient {
      */
     public CommandReply filter(String eventHeader, String valueToFilter) {
         checkConnected();
-        ClientHandler handler = (ClientHandler) channel.pipeline().last();
+        ClientHandler handler = (ClientHandler) channel.getPipeline().getLast();
         StringBuilder sb = new StringBuilder();
         if (eventHeader != null && !eventHeader.isEmpty()) {
             sb.append(eventHeader);
@@ -431,7 +427,7 @@ public class EslClient {
      */
     public CommandReply filterDelete(String eventHeader, String valueToFilter) {
         checkConnected();
-        ClientHandler handler = (ClientHandler) channel.pipeline().last();
+        ClientHandler handler = (ClientHandler) channel.getPipeline().getLast();
         StringBuilder sb = new StringBuilder();
         if (eventHeader != null && !eventHeader.isEmpty()) {
             sb.append("delete ");
@@ -458,7 +454,7 @@ public class EslClient {
      */
     public CommandReply noevents() {
         checkConnected();
-        ClientHandler handler = (ClientHandler) channel.pipeline().last();
+        ClientHandler handler = (ClientHandler) channel.getPipeline().getLast();
         NoEventsCommand noevents = new NoEventsCommand();
         EslMessage response = handler.sendSyncSingleLineCommand(channel,
                 noevents.toString());
@@ -472,7 +468,7 @@ public class EslClient {
      */
     public CommandReply nolog() {
         checkConnected();
-        ClientHandler handler = (ClientHandler) channel.pipeline().last();
+        ClientHandler handler = (ClientHandler) channel.getPipeline().getLast();
         EslMessage response = handler.sendSyncSingleLineCommand(channel,
                 new NologCommand().toString());
 
@@ -487,7 +483,7 @@ public class EslClient {
      */
     public CommandReply setLogLevel(LogLevels level) {
         checkConnected();
-        ClientHandler handler = (ClientHandler) channel.pipeline().last();
+        ClientHandler handler = (ClientHandler) channel.getPipeline().getLast();
         LogCommand log = new LogCommand(level);
         EslMessage response = handler.sendSyncSingleLineCommand(channel,
                 log.toString());

@@ -21,8 +21,7 @@ import io.freeswitch.events.EslEvent;
 import io.freeswitch.message.CommandReply;
 import io.freeswitch.message.EslHeaders.Value;
 import io.freeswitch.message.EslMessage;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelHandler.Sharable;
+import org.jboss.netty.channel.ChannelHandlerContext;
 
 /**
  * @author Arsene Tochemey GANDOTE
@@ -48,7 +47,7 @@ public class ClientHandler extends AbstractEslClientHandler {
     protected void handleAuthRequest(ChannelHandlerContext ctx) {
         log.debug("Auth requested, sending [auth {}]", "*****");
         AuthCommand auth = new AuthCommand(password);
-        EslMessage response = sendSyncSingleLineCommand(ctx.channel(), auth.toString());
+        EslMessage response = sendSyncSingleLineCommand(ctx.getChannel(), auth.toString());
         log.debug("Auth response [{}]", response);
         if (response.contentType().equals(Value.COMMAND_REPLY)) {
             CommandReply commandResponse = new CommandReply("auth " + password,

@@ -19,11 +19,6 @@ import io.freeswitch.events.EslEvent;
 import io.freeswitch.message.EslHeaders.Name;
 import io.freeswitch.message.EslHeaders.Value;
 import io.freeswitch.message.EslMessage;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelHandler;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.SimpleChannelInboundHandler;
 
 import java.util.List;
 import java.util.Queue;
@@ -31,6 +26,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import org.jboss.netty.channel.Channel;
+import org.jboss.netty.channel.ChannelHandlerContext;
+import org.jboss.netty.channel.MessageEvent;
+import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +39,7 @@ import org.slf4j.LoggerFactory;
  * @author david varnes
  */
 public abstract class AbstractEslClientHandler extends
-        SimpleChannelInboundHandler<Object> {
+        SimpleChannelUpstreamHandler {
 
     public static final String MESSAGE_TERMINATOR = "\n\n";
     public static final String LINE_TERMINATOR = "\n";
@@ -94,10 +93,10 @@ public abstract class AbstractEslClientHandler extends
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, Object msg)
+    public void messageReceived(ChannelHandlerContext ctx, MessageEvent e)
             throws Exception {
-        if (msg instanceof EslMessage) {
-            EslMessage message = (EslMessage) msg;
+        if (e.getMessage() instanceof EslMessage) {
+            EslMessage message = (EslMessage) e.getMessage();
             String contentType = message.contentType();
             if (contentType.equals(Value.TEXT_EVENT_PLAIN)
                     || contentType.equals(Value.TEXT_EVENT_XML)) {
@@ -105,12 +104,12 @@ public abstract class AbstractEslClientHandler extends
                 EslEvent eslEvent = new EslEvent(message);
                 handleEslEvent(ctx, eslEvent);
             } else {
-                handleEslMessage(ctx, (EslMessage) msg);
+                handleEslMessage(ctx, (EslMessage) e.getMessage());
             }
             return;
         }
         throw new IllegalStateException("Unexpected message type: "
-                + msg.getClass());
+                + e.getMessage().getClass());
     }
 
     protected abstract void handleEslEvent(ChannelHandlerContext ctx,
@@ -159,14 +158,7 @@ public abstract class AbstractEslClientHandler extends
             syncCallbacks.add(callback);
             String request = command + MESSAGE_TERMINATOR;
             log.debug("Command sent to freeSwitch [{}]", request);
-            ChannelFuture future = channel.writeAndFlush(request);
-            future.awaitUninterruptibly();
-            // Now we are sure the future is completed.
-            assert future.isDone();
-
-            if (!future.isSuccess()) {
-                log.warn("Error [{}]", future.cause());
-            }
+            channel.write(request);
         } finally {
             syncLock.unlock();
         }
@@ -176,12 +168,12 @@ public abstract class AbstractEslClientHandler extends
     }
 
     /**
-     * Synthesise a synchronous command/response by creating a callback object
+     * synthesize a synchronous command/response by creating a callback object
      * which is placed in queue and blocks waiting for another IO thread to
      * process an incoming {@link EslMessage} and attach it to the callback.
      *
      * @param channel
-     * @param command List of command lines to send
+     * @param commandLines
      * @return the {@link EslMessage} attached to this command's callback
      */
     public EslMessage sendSyncMultiLineCommand(Channel channel,
@@ -198,7 +190,7 @@ public abstract class AbstractEslClientHandler extends
         syncLock.lock();
         try {
             syncCallbacks.add(callback);
-            channel.writeAndFlush(sb.toString());
+            channel.write(sb.toString());
         } finally {
             syncLock.unlock();
         }
