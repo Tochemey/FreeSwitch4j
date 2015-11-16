@@ -8,8 +8,8 @@ In its current state it can help build IVR applications more quickly.
 
 ## **Features**
 The framework in its current state can be used to interact with FreeSwitch easily in:
-* Inbound mode [Event_Socket_Inbound](https://freeswitch.org/confluence/display/FREESWITCH/mod_event_socket#mod_event_socket-Inbound)
-* Outbound mode [Event_Socket_Outbound](https://wiki.freeswitch.org/wiki/Event_Socket_Outbound)
+* Inbound mode [Event Socket Inbound mode](https://freeswitch.org/confluence/display/FREESWITCH/mod_event_socket#mod_event_socket-Inbound)
+* Outbound mode [Event Socket Outbound mode](https://wiki.freeswitch.org/wiki/Event_Socket_Outbound)
 * One good thing it has is that you can implement your own FreeSwitch message decoder if you do not want to use the built-in ones
 
 ## **License**
