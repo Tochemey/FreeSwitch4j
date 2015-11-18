@@ -34,6 +34,7 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * @author Arsene Tochemey GANDOTE
  */
+@ChannelHandler.Sharable
 public abstract class AbstractInboundSessionHandler extends SimpleChannelUpstreamHandler {
 
     public static final String MESSAGE_TERMINATOR = "\n\n";
@@ -144,7 +145,6 @@ public abstract class AbstractInboundSessionHandler extends SimpleChannelUpstrea
      * process an incoming {@link FreeSwitchMessage} and attach it to the callback.
      *
      * @param channel
-     * @param command List of command lines to send
      * @return the {@link FreeSwitchMessage} attached to this command's callback
      */
     public FreeSwitchMessage sendSyncMultiLineCommand(Channel channel,

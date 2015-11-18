@@ -19,10 +19,7 @@ import io.freeswitch.codec.FreeSwitchMessageHeaders;
 import io.freeswitch.codec.FreeSwitchMessageHeaders.HeaderValue;
 import io.freeswitch.event.EslEvent;
 import io.freeswitch.message.FreeSwitchMessage;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.channel.MessageEvent;
-import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
+import org.jboss.netty.channel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +34,8 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author Arsene Tochemey GANDOTE
  * @author david varnes
  */
-public abstract class AbstractOutboundHandler extends
+@ChannelHandler.Sharable
+public abstract class AbstractOutboundClientHandler extends
         SimpleChannelUpstreamHandler {
 
     public static final String MESSAGE_TERMINATOR = "\n\n";
@@ -51,7 +49,7 @@ public abstract class AbstractOutboundHandler extends
     /**
      *
      */
-    public AbstractOutboundHandler() {
+    public AbstractOutboundClientHandler() {
     }
 
     @Override

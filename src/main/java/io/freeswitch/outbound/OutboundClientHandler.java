@@ -26,7 +26,7 @@ import org.jboss.netty.channel.ChannelHandlerContext;
 /**
  * @author Arsene Tochemey GANDOTE
  */
-public class OutboundClientHandler extends AbstractOutboundHandler {
+public class OutboundClientHandler extends AbstractOutboundClientHandler {
 
     private final String password;
     private final IProtocolListener listener;
