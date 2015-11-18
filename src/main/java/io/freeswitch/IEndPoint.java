@@ -18,17 +18,16 @@ package io.freeswitch;
 /**
  * An address for an FreeSWITCH end point. Can be a SIP address, an sofia
  * address or event an application
- * 
- * @author Arsene Tochemey GANDOTE
  *
+ * @author Arsene Tochemey GANDOTE
  */
 public interface IEndPoint {
 
-	/**
-	 * Format the address as a string which could be dialed using the
-	 * "originate" or "bridge" commands
-	 * 
-	 * @return Properly formatted string
-	 */
-	public String toDialString();
+    /**
+     * Format the address as a string which could be dialed using the
+     * "originate" or "bridge" command
+     *
+     * @return Properly formatted string
+     */
+    public String toDialString();
 }

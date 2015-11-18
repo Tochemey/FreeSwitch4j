@@ -17,22 +17,21 @@ package io.freeswitch;
 
 /**
  * ChannelVariable. It helps set channel variables.
- * 
- * @author Arsene Tochemey GANDOTE
  *
+ * @author Arsene Tochemey GANDOTE
  */
 public class ChannelVariable {
 
-	private String _name;
-	private String _value;
+    private String _name;
+    private String _value;
 
-	public ChannelVariable(String name, String value) {
-		_name = name;
-		_value = value;
-	}
+    public ChannelVariable(String name, String value) {
+        _name = name;
+        _value = value;
+    }
 
-	@Override
-	public String toString() {
-		return _name + "=" + _value;
-	}
+    @Override
+    public String toString() {
+        return _name + "=" + _value;
+    }
 }

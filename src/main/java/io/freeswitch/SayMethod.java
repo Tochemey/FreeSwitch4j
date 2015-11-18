@@ -17,8 +17,7 @@ package io.freeswitch;
 
 /**
  * @author Arsene Tochemey GANDOTE
- *
  */
 public enum SayMethod {
-	N_A, PRONOUNCED, ITERATED, COUNTED
+    N_A, PRONOUNCED, ITERATED, COUNTED
 }

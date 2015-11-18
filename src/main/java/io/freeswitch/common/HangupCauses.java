@@ -17,7 +17,6 @@ package io.freeswitch.common;
 
 /**
  * @author Arsene Tochemey GANDOTE
- *
  */
 public enum HangupCauses {
     NONE(0),
@@ -86,13 +85,13 @@ public enum HangupCauses {
     PROGRESS_TIMEOUT(607),
     UNKNOWN(9999);
 
-	private long val;
+    private long val;
 
-	private HangupCauses(long val) {
-		this.val = val;
-	}
+    private HangupCauses(long val) {
+        this.val = val;
+    }
 
-	public long itutq850Code() {
-		return val;
-	}
+    public long itutq850Code() {
+        return val;
+    }
 }

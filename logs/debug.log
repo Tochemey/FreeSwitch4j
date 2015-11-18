@@ -3,9 +3,9 @@
 2015-11-16 07:02:32 -   * reason: {}
 java.nio.channels.ClosedChannelException: null
 2015-11-16 07:02:35 - Connect failed
-io.freeswitch.net.ConnectionFailure: Could not connect to 192.168.254.246:8021
-	at io.freeswitch.net.EslClient.connect(EslClient.java:311) ~[classes/:na]
-	at io.freeswitch.EslClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
+io.freeswitch.ConnectionFailure: Could not connect to 192.168.254.246:8021
+	at io.freeswitch.outbound.OutboundClient.connect(EslClient.java:311) ~[classes/:na]
+	at io.freeswitch.OutboundClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_05]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_05]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_05]
@@ -35,9 +35,9 @@ Caused by: java.nio.channels.ClosedChannelException: null
 2015-11-16 07:03:58 -   * reason: {}
 java.nio.channels.ClosedChannelException: null
 2015-11-16 07:04:00 - Connect failed
-io.freeswitch.net.ConnectionFailure: Could not connect to 192.168.254.246:8021
-	at io.freeswitch.net.EslClient.connect(EslClient.java:311) ~[classes/:na]
-	at io.freeswitch.EslClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
+io.freeswitch.ConnectionFailure: Could not connect to 192.168.254.246:8021
+	at io.freeswitch.outbound.OutboundClient.connect(EslClient.java:311) ~[classes/:na]
+	at io.freeswitch.OutboundClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_05]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_05]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_05]
@@ -67,9 +67,9 @@ Caused by: java.nio.channels.ClosedChannelException: null
 2015-11-16 07:09:27 -   * reason: {}
 java.nio.channels.ClosedChannelException: null
 2015-11-16 07:09:29 - Connect failed
-io.freeswitch.net.ConnectionFailure: Could not connect to 192.168.254.246:8021
-	at io.freeswitch.net.EslClient.connect(EslClient.java:311) ~[classes/:na]
-	at io.freeswitch.EslClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
+io.freeswitch.ConnectionFailure: Could not connect to 192.168.254.246:8021
+	at io.freeswitch.outbound.OutboundClient.connect(EslClient.java:311) ~[classes/:na]
+	at io.freeswitch.OutboundClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_05]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_05]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_05]
@@ -99,9 +99,9 @@ Caused by: java.nio.channels.ClosedChannelException: null
 2015-11-16 07:11:53 -   * reason: {}
 java.nio.channels.ClosedChannelException: null
 2015-11-16 07:11:56 - Connect failed
-io.freeswitch.net.ConnectionFailure: Could not connect to 192.168.254.246:8021
-	at io.freeswitch.net.EslClient.connect(EslClient.java:312) ~[classes/:na]
-	at io.freeswitch.EslClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
+io.freeswitch.ConnectionFailure: Could not connect to 192.168.254.246:8021
+	at io.freeswitch.outbound.OutboundClient.connect(EslClient.java:312) ~[classes/:na]
+	at io.freeswitch.OutboundClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_05]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_05]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_05]
@@ -137,9 +137,9 @@ Caused by: java.nio.channels.ClosedChannelException: null
 2015-11-16 07:15:06 -   * reason: {}
 java.nio.channels.ClosedChannelException: null
 2015-11-16 07:15:08 - Connect failed
-io.freeswitch.net.ConnectionFailure: Could not connect to 192.168.254.246:8021
-	at io.freeswitch.net.EslClient.connect(EslClient.java:312) ~[classes/:na]
-	at io.freeswitch.EslClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
+io.freeswitch.ConnectionFailure: Could not connect to 192.168.254.246:8021
+	at io.freeswitch.outbound.OutboundClient.connect(EslClient.java:312) ~[classes/:na]
+	at io.freeswitch.OutboundClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_05]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_05]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_05]
@@ -175,9 +175,9 @@ Caused by: java.nio.channels.ClosedChannelException: null
 2015-11-16 07:15:19 -   * reason: {}
 java.nio.channels.ClosedChannelException: null
 2015-11-16 07:15:21 - Connect failed
-io.freeswitch.net.ConnectionFailure: Could not connect to 192.168.254.246:8021
-	at io.freeswitch.net.EslClient.connect(EslClient.java:312) ~[classes/:na]
-	at io.freeswitch.EslClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
+io.freeswitch.ConnectionFailure: Could not connect to 192.168.254.246:8021
+	at io.freeswitch.outbound.OutboundClient.connect(EslClient.java:312) ~[classes/:na]
+	at io.freeswitch.OutboundClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_05]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_05]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_05]
@@ -209,9 +209,9 @@ Caused by: java.nio.channels.ClosedChannelException: null
 2015-11-16 07:24:54 -   * reason: {}
 java.nio.channels.ClosedChannelException: null
 2015-11-16 07:24:56 - Connect failed
-io.freeswitch.net.ConnectionFailure: Could not connect to 192.168.254.246:8021
-	at io.freeswitch.net.EslClient.connect(EslClient.java:312) ~[classes/:na]
-	at io.freeswitch.EslClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
+io.freeswitch.ConnectionFailure: Could not connect to 192.168.254.246:8021
+	at io.freeswitch.outbound.OutboundClient.connect(EslClient.java:312) ~[classes/:na]
+	at io.freeswitch.OutboundClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_05]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_05]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_05]
@@ -247,9 +247,9 @@ Caused by: java.nio.channels.ClosedChannelException: null
 2015-11-16 07:25:30 -   * reason: {}
 java.nio.channels.ClosedChannelException: null
 2015-11-16 07:25:32 - Connect failed
-io.freeswitch.net.ConnectionFailure: Could not connect to 192.168.254.246:8021
-	at io.freeswitch.net.EslClient.connect(EslClient.java:312) ~[classes/:na]
-	at io.freeswitch.EslClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
+io.freeswitch.ConnectionFailure: Could not connect to 192.168.254.246:8021
+	at io.freeswitch.outbound.OutboundClient.connect(EslClient.java:312) ~[classes/:na]
+	at io.freeswitch.OutboundClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_05]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_05]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_05]
@@ -279,9 +279,9 @@ Caused by: java.nio.channels.ClosedChannelException: null
 2015-11-16 07:38:43 -   * reason: {}
 java.nio.channels.ClosedChannelException: null
 2015-11-16 07:38:45 - Connect failed
-io.freeswitch.net.ConnectionFailure: Could not connect to 192.168.254.246:8021
-	at io.freeswitch.net.EslClient.connect(EslClient.java:312) ~[classes/:na]
-	at io.freeswitch.EslClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
+io.freeswitch.ConnectionFailure: Could not connect to 192.168.254.246:8021
+	at io.freeswitch.outbound.OutboundClient.connect(EslClient.java:312) ~[classes/:na]
+	at io.freeswitch.OutboundClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_05]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_05]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_05]
@@ -317,9 +317,9 @@ Caused by: java.nio.channels.ClosedChannelException: null
 2015-11-16 07:42:01 -   * reason: {}
 java.nio.channels.ClosedChannelException: null
 2015-11-16 07:42:04 - Connect failed
-io.freeswitch.net.ConnectionFailure: Could not connect to 192.168.254.246:8021
-	at io.freeswitch.net.EslClient.connect(EslClient.java:312) ~[classes/:na]
-	at io.freeswitch.EslClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
+io.freeswitch.ConnectionFailure: Could not connect to 192.168.254.246:8021
+	at io.freeswitch.outbound.OutboundClient.connect(EslClient.java:312) ~[classes/:na]
+	at io.freeswitch.OutboundClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_05]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_05]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_05]
@@ -355,9 +355,9 @@ Caused by: java.nio.channels.ClosedChannelException: null
 2015-11-16 07:44:47 -   * reason: {}
 java.nio.channels.ClosedChannelException: null
 2015-11-16 07:44:49 - Connect failed
-io.freeswitch.net.ConnectionFailure: Could not connect to 192.168.254.246:8021
-	at io.freeswitch.net.EslClient.connect(EslClient.java:310) ~[classes/:na]
-	at io.freeswitch.EslClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
+io.freeswitch.ConnectionFailure: Could not connect to 192.168.254.246:8021
+	at io.freeswitch.outbound.OutboundClient.connect(EslClient.java:310) ~[classes/:na]
+	at io.freeswitch.OutboundClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_05]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_05]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_05]
@@ -393,9 +393,9 @@ Caused by: java.nio.channels.ClosedChannelException: null
 2015-11-16 07:47:33 -   * reason: {}
 java.nio.channels.ClosedChannelException: null
 2015-11-16 07:47:35 - Connect failed
-io.freeswitch.net.ConnectionFailure: Could not connect to 192.168.254.246:8021
-	at io.freeswitch.net.EslClient.connect(EslClient.java:309) ~[classes/:na]
-	at io.freeswitch.EslClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
+io.freeswitch.ConnectionFailure: Could not connect to 192.168.254.246:8021
+	at io.freeswitch.outbound.OutboundClient.connect(EslClient.java:309) ~[classes/:na]
+	at io.freeswitch.OutboundClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_05]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_05]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_05]
@@ -431,9 +431,9 @@ Caused by: java.nio.channels.ClosedChannelException: null
 2015-11-16 07:48:13 -   * reason: {}
 java.nio.channels.ClosedChannelException: null
 2015-11-16 07:48:15 - Connect failed
-io.freeswitch.net.ConnectionFailure: Could not connect to 192.168.254.246:8021
-	at io.freeswitch.net.EslClient.connect(EslClient.java:310) ~[classes/:na]
-	at io.freeswitch.EslClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
+io.freeswitch.ConnectionFailure: Could not connect to 192.168.254.246:8021
+	at io.freeswitch.outbound.OutboundClient.connect(EslClient.java:310) ~[classes/:na]
+	at io.freeswitch.OutboundClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_05]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_05]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_05]
@@ -467,9 +467,9 @@ Caused by: java.nio.channels.ClosedChannelException: null
 2015-11-16 07:52:35 - Client connecting ..
 2015-11-16 07:52:35 - Failed to connect to [192.168.254.246:8021]
 2015-11-16 07:52:38 - Connect failed
-io.freeswitch.net.ConnectionFailure: Could not connect to 192.168.254.246:8021
-	at io.freeswitch.net.EslClient.connect(EslClient.java:307) ~[classes/:na]
-	at io.freeswitch.EslClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
+io.freeswitch.ConnectionFailure: Could not connect to 192.168.254.246:8021
+	at io.freeswitch.outbound.OutboundClient.connect(EslClient.java:307) ~[classes/:na]
+	at io.freeswitch.OutboundClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_05]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_05]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_05]
@@ -503,9 +503,9 @@ Caused by: java.nio.channels.ClosedChannelException: null
 2015-11-16 08:00:14 - Client connecting ..
 2015-11-16 08:00:15 - Failed to connect to [192.168.254.246:8021]
 2015-11-16 08:00:15 - Connect failed
-io.freeswitch.net.ConnectionFailure: Could not connect to 192.168.254.246:8021
-	at io.freeswitch.net.EslClient.connect(EslClient.java:307) ~[classes/:na]
-	at io.freeswitch.EslClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
+io.freeswitch.ConnectionFailure: Could not connect to 192.168.254.246:8021
+	at io.freeswitch.outbound.OutboundClient.connect(EslClient.java:307) ~[classes/:na]
+	at io.freeswitch.OutboundClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_05]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_05]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_05]
@@ -539,9 +539,9 @@ Caused by: java.nio.channels.ClosedChannelException: null
 2015-11-16 08:03:21 - Client connecting ..
 2015-11-16 08:03:21 - Failed to connect to [192.168.254.246:8021]
 2015-11-16 08:03:23 - Connect failed
-io.freeswitch.net.ConnectionFailure: Could not connect to 192.168.254.246:8021
-	at io.freeswitch.net.EslClient.connect(EslClient.java:307) ~[classes/:na]
-	at io.freeswitch.EslClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
+io.freeswitch.ConnectionFailure: Could not connect to 192.168.254.246:8021
+	at io.freeswitch.outbound.OutboundClient.connect(EslClient.java:307) ~[classes/:na]
+	at io.freeswitch.OutboundClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_05]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_05]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_05]
@@ -575,9 +575,9 @@ Caused by: java.nio.channels.ClosedChannelException: null
 2015-11-16 08:17:18 - Client connecting ..
 2015-11-16 08:17:18 - Failed to connect to [192.168.254.246:8021]
 2015-11-16 08:17:20 - Connect failed
-io.freeswitch.net.ConnectionFailure: Could not connect to 192.168.254.246:8021
-	at io.freeswitch.net.EslClient.connect(EslClient.java:301) ~[classes/:na]
-	at io.freeswitch.EslClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
+io.freeswitch.ConnectionFailure: Could not connect to 192.168.254.246:8021
+	at io.freeswitch.outbound.OutboundClient.connect(EslClient.java:301) ~[classes/:na]
+	at io.freeswitch.OutboundClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_05]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_05]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_05]
@@ -638,9 +638,9 @@ Caused by: java.nio.channels.ClosedChannelException: null
 2015-11-16 09:44:22 - Client connecting ..
 2015-11-16 09:44:23 - Failed to connect to [192.168.254.246:8021]
 2015-11-16 09:44:25 - Connect failed
-io.freeswitch.net.ConnectionFailure: Could not connect to 192.168.254.246:8021
-	at io.freeswitch.net.EslClient.connect(EslClient.java:300) ~[classes/:na]
-	at io.freeswitch.EslClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
+io.freeswitch.ConnectionFailure: Could not connect to 192.168.254.246:8021
+	at io.freeswitch.outbound.OutboundClient.connect(EslClient.java:300) ~[classes/:na]
+	at io.freeswitch.OutboundClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_05]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_05]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_05]
@@ -674,9 +674,9 @@ Caused by: java.nio.channels.ClosedChannelException: null
 2015-11-16 09:45:27 - Client connecting ..
 2015-11-16 09:45:28 - Failed to connect to [192.168.254.246:8021]
 2015-11-16 09:45:30 - Connect failed
-io.freeswitch.net.ConnectionFailure: Could not connect to 192.168.254.246:8021
-	at io.freeswitch.net.EslClient.connect(EslClient.java:300) ~[classes/:na]
-	at io.freeswitch.EslClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
+io.freeswitch.ConnectionFailure: Could not connect to 192.168.254.246:8021
+	at io.freeswitch.outbound.OutboundClient.connect(EslClient.java:300) ~[classes/:na]
+	at io.freeswitch.OutboundClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_05]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_05]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_05]
@@ -704,9 +704,9 @@ Caused by: java.nio.channels.ClosedChannelException: null
 2015-11-16 09:46:48 - Client connecting ..
 2015-11-16 09:46:48 - Failed to connect to [192.168.254.246:8021]
 2015-11-16 09:46:50 - Connect failed
-io.freeswitch.net.ConnectionFailure: Could not connect to 192.168.254.246:8021
-	at io.freeswitch.net.EslClient.connect(EslClient.java:300) ~[classes/:na]
-	at io.freeswitch.EslClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
+io.freeswitch.ConnectionFailure: Could not connect to 192.168.254.246:8021
+	at io.freeswitch.outbound.OutboundClient.connect(EslClient.java:300) ~[classes/:na]
+	at io.freeswitch.OutboundClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_05]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_05]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_05]
@@ -740,9 +740,9 @@ Caused by: java.nio.channels.ClosedChannelException: null
 2015-11-16 09:48:02 - Client connecting ..
 2015-11-16 09:48:02 - Failed to connect to [192.168.254.246:8021]
 2015-11-16 09:48:04 - Connect failed
-io.freeswitch.net.ConnectionFailure: Could not connect to 192.168.254.246:8021
-	at io.freeswitch.net.EslClient.connect(EslClient.java:300) ~[classes/:na]
-	at io.freeswitch.EslClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
+io.freeswitch.ConnectionFailure: Could not connect to 192.168.254.246:8021
+	at io.freeswitch.outbound.OutboundClient.connect(EslClient.java:300) ~[classes/:na]
+	at io.freeswitch.OutboundClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.8.0_05]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62) ~[na:1.8.0_05]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.8.0_05]
@@ -776,9 +776,9 @@ Caused by: java.nio.channels.ClosedChannelException: null
 2015-11-16 09:51:28 - Client connecting ..
 2015-11-16 09:51:29 - Failed to connect to [192.168.254.246:8021]
 2015-11-16 09:51:31 - Connect failed
-io.freeswitch.net.ConnectionFailure: Could not connect to 192.168.254.246:8021
-	at io.freeswitch.net.EslClient.connect(EslClient.java:300) ~[classes/:na]
-	at io.freeswitch.EslClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
+io.freeswitch.ConnectionFailure: Could not connect to 192.168.254.246:8021
+	at io.freeswitch.outbound.OutboundClient.connect(EslClient.java:300) ~[classes/:na]
+	at io.freeswitch.OutboundClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.7.0_25]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57) ~[na:1.7.0_25]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.7.0_25]
@@ -812,9 +812,9 @@ Caused by: java.nio.channels.ClosedChannelException: null
 2015-11-16 09:54:56 - Client connecting ..
 2015-11-16 09:54:56 - Failed to connect to [192.168.254.246:8021]
 2015-11-16 09:54:58 - Connect failed
-io.freeswitch.net.ConnectionFailure: Could not connect to 192.168.254.246:8021
-	at io.freeswitch.net.EslClient.connect(EslClient.java:300) ~[classes/:na]
-	at io.freeswitch.EslClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
+io.freeswitch.ConnectionFailure: Could not connect to 192.168.254.246:8021
+	at io.freeswitch.outbound.OutboundClient.connect(EslClient.java:300) ~[classes/:na]
+	at io.freeswitch.OutboundClientTest.connect(EslClientTest.java:60) ~[test-classes/:na]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.7.0_25]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57) ~[na:1.7.0_25]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.7.0_25]
@@ -848,9 +848,9 @@ Caused by: java.nio.channels.ClosedChannelException: null
 2015-11-16 09:58:34 - Client connecting ..
 2015-11-16 09:58:34 - Failed to connect to [192.168.254.246:8021]
 2015-11-16 09:58:37 - Connect failed
-io.freeswitch.net.ConnectionFailure: Could not connect to 192.168.254.246:8021
-	at io.freeswitch.net.EslClient.connect(EslClient.java:300) ~[classes/:na]
-	at io.freeswitch.EslClientTest.connect(EslClientTest.java:61) ~[test-classes/:na]
+io.freeswitch.ConnectionFailure: Could not connect to 192.168.254.246:8021
+	at io.freeswitch.outbound.OutboundClient.connect(EslClient.java:300) ~[classes/:na]
+	at io.freeswitch.OutboundClientTest.connect(EslClientTest.java:61) ~[test-classes/:na]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.7.0_25]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57) ~[na:1.7.0_25]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.7.0_25]
@@ -884,9 +884,9 @@ Caused by: java.nio.channels.ClosedChannelException: null
 2015-11-16 10:00:17 - Client connecting ..
 2015-11-16 10:00:17 - Failed to connect to [192.168.254.246:8021]
 2015-11-16 10:00:19 - Connect failed
-io.freeswitch.net.ConnectionFailure: Could not connect to 192.168.254.246:8021
-	at io.freeswitch.net.EslClient.connect(EslClient.java:300) ~[classes/:na]
-	at io.freeswitch.EslClientTest.connect(EslClientTest.java:61) ~[test-classes/:na]
+io.freeswitch.ConnectionFailure: Could not connect to 192.168.254.246:8021
+	at io.freeswitch.outbound.OutboundClient.connect(EslClient.java:300) ~[classes/:na]
+	at io.freeswitch.OutboundClientTest.connect(EslClientTest.java:61) ~[test-classes/:na]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.7.0_25]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57) ~[na:1.7.0_25]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.7.0_25]
@@ -920,9 +920,9 @@ Caused by: java.nio.channels.ClosedChannelException: null
 2015-11-16 10:00:44 - Client connecting ..
 2015-11-16 10:00:45 - Failed to connect to [192.168.254.246:8021]
 2015-11-16 10:00:47 - Connect failed
-io.freeswitch.net.ConnectionFailure: Could not connect to 192.168.254.246:8021
-	at io.freeswitch.net.EslClient.connect(EslClient.java:300) ~[classes/:na]
-	at io.freeswitch.EslClientTest.connect(EslClientTest.java:61) ~[test-classes/:na]
+io.freeswitch.ConnectionFailure: Could not connect to 192.168.254.246:8021
+	at io.freeswitch.outbound.OutboundClient.connect(EslClient.java:300) ~[classes/:na]
+	at io.freeswitch.OutboundClientTest.connect(EslClientTest.java:61) ~[test-classes/:na]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.7.0_25]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57) ~[na:1.7.0_25]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.7.0_25]
@@ -956,9 +956,9 @@ Caused by: java.nio.channels.ClosedChannelException: null
 2015-11-16 10:08:52 - Client connecting ..
 2015-11-16 10:08:52 - Failed to connect to [192.168.254.246:8021]
 2015-11-16 10:08:54 - Connect failed
-io.freeswitch.net.ConnectionFailure: Could not connect to 192.168.254.246:8021
-	at io.freeswitch.net.EslClient.connect(EslClient.java:302) ~[classes/:na]
-	at io.freeswitch.EslClientTest.connect(EslClientTest.java:61) ~[test-classes/:na]
+io.freeswitch.ConnectionFailure: Could not connect to 192.168.254.246:8021
+	at io.freeswitch.outbound.OutboundClient.connect(EslClient.java:302) ~[classes/:na]
+	at io.freeswitch.OutboundClientTest.connect(EslClientTest.java:61) ~[test-classes/:na]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.7.0_25]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57) ~[na:1.7.0_25]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.7.0_25]
@@ -992,9 +992,9 @@ Caused by: java.nio.channels.ClosedChannelException: null
 2015-11-16 10:17:12 - Client connecting ..
 2015-11-16 10:17:12 - Failed to connect to [192.168.254.246:8021]
 2015-11-16 10:17:14 - Connect failed
-io.freeswitch.net.ConnectionFailure: Could not connect to 192.168.254.246:8021
-	at io.freeswitch.net.EslClient.connect(EslClient.java:302) ~[classes/:na]
-	at io.freeswitch.EslClientTest.connect(EslClientTest.java:61) ~[test-classes/:na]
+io.freeswitch.ConnectionFailure: Could not connect to 192.168.254.246:8021
+	at io.freeswitch.outbound.OutboundClient.connect(EslClient.java:302) ~[classes/:na]
+	at io.freeswitch.OutboundClientTest.connect(EslClientTest.java:61) ~[test-classes/:na]
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.7.0_25]
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57) ~[na:1.7.0_25]
 	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.7.0_25]

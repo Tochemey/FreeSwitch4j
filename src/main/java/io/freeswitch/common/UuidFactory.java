@@ -18,7 +18,6 @@ package io.freeswitch.common;
 import java.util.UUID;
 
 /**
- *
  * @author Arsene Tochemey GANDOTE
  */
 public class UuidFactory {

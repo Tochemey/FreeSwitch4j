@@ -17,10 +17,9 @@ package io.freeswitch.common;
 
 /**
  * @author Arsene Tochemey GANDOTE
- *
  */
 public enum LogLevels {
-    CONSOLE (0),
+    CONSOLE(0),
     ALERT(1),
     CRIT(2),
     ERR(3),
@@ -28,17 +27,17 @@ public enum LogLevels {
     NOTICE(5),
     INFO(6),
     DEBUG(7);
-    
+
     private long val;
-    
+
     /**
-	 * 
-	 */
-	private LogLevels(long val) {
-		this.val = val;
-	}
-	
-	public long level() {
-		return val;
-	}
+     *
+     */
+    private LogLevels(long val) {
+        this.val = val;
+    }
+
+    public long level() {
+        return val;
+    }
 }

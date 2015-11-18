@@ -17,8 +17,7 @@ package io.freeswitch;
 
 /**
  * @author Arsene Tochemey GANDOTE
- *
  */
 public enum SayGender {
-	FEMININE, MASCULINE, NEUTER
+    FEMININE, MASCULINE, NEUTER
 }
