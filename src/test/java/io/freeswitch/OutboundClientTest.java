@@ -18,7 +18,7 @@ package io.freeswitch;
 import io.freeswitch.event.EslEvent;
 import io.freeswitch.event.IEventsListener;
 import io.freeswitch.message.FreeSwitchMessage;
-import io.freeswitch.outbound.OutboundClient;
+import io.freeswitch.outbound.FreeSwitchClient;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,8 +40,8 @@ public class OutboundClientTest {
     @Test
     public void connect() throws InterruptedException {
 
-        // instance of OutboundClient
-        OutboundClient client = new OutboundClient();
+        // instance of FreeSwitchClient
+        FreeSwitchClient client = new FreeSwitchClient();
         client.addEventListener(new IEventsListener() {
 
             public void eventReceived(EslEvent event) {

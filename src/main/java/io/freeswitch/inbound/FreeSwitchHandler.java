@@ -24,7 +24,6 @@ import org.jboss.netty.channel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
@@ -35,7 +34,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author Arsene Tochemey GANDOTE
  */
 @ChannelHandler.Sharable
-public abstract class AbstractInboundSessionHandler extends SimpleChannelUpstreamHandler {
+public abstract class FreeSwitchHandler extends SimpleChannelUpstreamHandler {
 
     public static final String MESSAGE_TERMINATOR = "\n\n";
     public static final String LINE_TERMINATOR = "\n";
@@ -53,7 +52,7 @@ public abstract class AbstractInboundSessionHandler extends SimpleChannelUpstrea
                 "Received new connection from server [{}], sending connect message",
                 channel.getLocalAddress().toString());
         ConnectCommand connect = new ConnectCommand();
-        FreeSwitchMessage response = sendSyncSingleLineCommand(ctx.getChannel(),
+        FreeSwitchMessage response = sendSyncCommand(ctx.getChannel(),
                 connect.toString());
         // The message decoder for outbound, treats most of this incoming
         // message as an 'event' in
@@ -61,6 +60,11 @@ public abstract class AbstractInboundSessionHandler extends SimpleChannelUpstrea
         EslEvent channelDataEvent = new EslEvent(response, true);
         // Let implementing sub classes choose what to do next
         handleConnectResponse(ctx, channelDataEvent);
+    }
+
+    @Override
+    public void channelDisconnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
+        handleDisconnectionNotice(ctx);
     }
 
     @Override
@@ -91,7 +95,7 @@ public abstract class AbstractInboundSessionHandler extends SimpleChannelUpstrea
     protected abstract void handleConnectResponse(ChannelHandlerContext ctx,
                                                   EslEvent event);
 
-    protected abstract void handleDisconnectionNotice();
+    protected abstract void handleDisconnectionNotice(ChannelHandlerContext ctx);
 
     protected abstract void handleEslEvent(ChannelHandlerContext ctx,
                                            EslEvent event);
@@ -109,7 +113,7 @@ public abstract class AbstractInboundSessionHandler extends SimpleChannelUpstrea
             syncCallbacks.poll().handle(message);
         } else if (contentType.equals(HeaderValue.TEXT_DISCONNECT_NOTICE)) {
             log.debug("Disconnect notice received [{}]", message);
-            handleDisconnectionNotice();
+            handleDisconnectionNotice(ctx);
         } else {
             log.warn("Unexpected message content type [{}]", contentType);
         }
@@ -130,7 +134,7 @@ public abstract class AbstractInboundSessionHandler extends SimpleChannelUpstrea
          * Send synchronously to get the Job-UUID to return, the results of the
          * actual job request will be returned by the server as an async event.
          */
-        FreeSwitchMessage response = sendSyncSingleLineCommand(channel, command);
+        FreeSwitchMessage response = sendSyncCommand(channel, command);
         if (response.hasHeader(HeaderName.JOB_UUID)) {
             return response.headerValue(HeaderName.JOB_UUID);
         } else {
@@ -139,36 +143,6 @@ public abstract class AbstractInboundSessionHandler extends SimpleChannelUpstrea
         }
     }
 
-    /**
-     * synthesize a synchronous command/response by creating a callback object
-     * which is placed in queue and blocks waiting for another IO thread to
-     * process an incoming {@link FreeSwitchMessage} and attach it to the callback.
-     *
-     * @param channel
-     * @return the {@link FreeSwitchMessage} attached to this command's callback
-     */
-    public FreeSwitchMessage sendSyncMultiLineCommand(Channel channel,
-                                                      final List<String> commandLines) {
-        SyncCallback callback = new SyncCallback();
-        // Build command with double line terminator at the end
-        StringBuilder sb = new StringBuilder();
-        for (String line : commandLines) {
-            sb.append(line);
-            sb.append(LINE_TERMINATOR);
-        }
-        sb.append(LINE_TERMINATOR);
-
-        syncLock.lock();
-        try {
-            syncCallbacks.add(callback);
-            channel.write(sb.toString());
-        } finally {
-            syncLock.unlock();
-        }
-
-        // Block until the response is available
-        return callback.get();
-    }
 
     /**
      * Synthesise a synchronous command/response by creating a callback object
@@ -179,8 +153,8 @@ public abstract class AbstractInboundSessionHandler extends SimpleChannelUpstrea
      * @param command single string to send
      * @return the {@link FreeSwitchMessage} attached to this command's callback
      */
-    public FreeSwitchMessage sendSyncSingleLineCommand(Channel channel,
-                                                       final String command) {
+    public FreeSwitchMessage sendSyncCommand(Channel channel,
+                                             final String command) {
         SyncCallback callback = new SyncCallback();
         syncLock.lock();
         try {

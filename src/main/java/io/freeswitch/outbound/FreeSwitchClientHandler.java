@@ -23,7 +23,6 @@ import org.jboss.netty.channel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
@@ -35,7 +34,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author david varnes
  */
 @ChannelHandler.Sharable
-public abstract class AbstractOutboundClientHandler extends
+public abstract class FreeSwitchClientHandler extends
         SimpleChannelUpstreamHandler {
 
     public static final String MESSAGE_TERMINATOR = "\n\n";
@@ -49,7 +48,7 @@ public abstract class AbstractOutboundClientHandler extends
     /**
      *
      */
-    public AbstractOutboundClientHandler() {
+    public FreeSwitchClientHandler() {
     }
 
     @Override
@@ -110,8 +109,8 @@ public abstract class AbstractOutboundClientHandler extends
      * @param command single string to send
      * @return the {@link FreeSwitchMessage} attached to this command's callback
      */
-    public FreeSwitchMessage sendSyncSingleLineCommand(Channel channel,
-                                                       final String command) {
+    public FreeSwitchMessage sendSyncCommand(Channel channel,
+                                             final String command) {
         SyncCallback callback = new SyncCallback();
         syncLock.lock();
         try {
@@ -127,37 +126,6 @@ public abstract class AbstractOutboundClientHandler extends
         return callback.get();
     }
 
-    /**
-     * synthesize a synchronous command/response by creating a callback object
-     * which is placed in queue and blocks waiting for another IO thread to
-     * process an incoming {@link FreeSwitchMessage} and attach it to the callback.
-     *
-     * @param channel
-     * @param commandLines
-     * @return the {@link FreeSwitchMessage} attached to this command's callback
-     */
-    public FreeSwitchMessage sendSyncMultiLineCommand(Channel channel,
-                                                      final List<String> commandLines) {
-        SyncCallback callback = new SyncCallback();
-        // Build command with double line terminator at the end
-        StringBuilder sb = new StringBuilder();
-        for (String line : commandLines) {
-            sb.append(line);
-            sb.append(LINE_TERMINATOR);
-        }
-        sb.append(LINE_TERMINATOR);
-
-        syncLock.lock();
-        try {
-            syncCallbacks.add(callback);
-            channel.write(sb.toString());
-        } finally {
-            syncLock.unlock();
-        }
-
-        // Block until the response is available
-        return callback.get();
-    }
 
     /**
      * Returns the Job UUID of that the response event will have.
@@ -171,7 +139,7 @@ public abstract class AbstractOutboundClientHandler extends
          * Send synchronously to get the Job-UUID to return, the results of the
          * actual job request will be returned by the server as an async event.
          */
-        FreeSwitchMessage response = sendSyncSingleLineCommand(channel, command);
+        FreeSwitchMessage response = sendSyncCommand(channel, command);
         if (response.hasHeader(FreeSwitchMessageHeaders.HeaderName.JOB_UUID)) {
             return response.headerValue(FreeSwitchMessageHeaders.HeaderName.JOB_UUID);
         } else {

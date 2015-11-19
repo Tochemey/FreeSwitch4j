@@ -42,7 +42,7 @@ import java.util.concurrent.Executors;
  *
  * @author Arsene Tochemey GANDOTE
  */
-public class ChannelTcpServer {
+public class FreeSwitchServer {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -53,13 +53,13 @@ public class ChannelTcpServer {
     private final ChannelGroup allChannels = new DefaultChannelGroup("esl-socket-server");
 
     private final ChannelFactory channelFactory;
-    private final ChannelTcpFactory pipelineFactory;
+    private final FreeSwitchPipelineFactory pipelineFactory;
 
     /**
      *
      */
-    public ChannelTcpServer(int port,
-                            ChannelTcpFactory pipelineFactory) {
+    public FreeSwitchServer(int port,
+                            FreeSwitchPipelineFactory pipelineFactory) {
         this.port = port;
         this.pipelineFactory = pipelineFactory;
         this.channelFactory = new NioServerSocketChannelFactory(

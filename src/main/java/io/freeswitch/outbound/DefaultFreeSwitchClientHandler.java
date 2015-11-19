@@ -26,12 +26,12 @@ import org.jboss.netty.channel.ChannelHandlerContext;
 /**
  * @author Arsene Tochemey GANDOTE
  */
-public class OutboundClientHandler extends AbstractOutboundClientHandler {
+public class DefaultFreeSwitchClientHandler extends FreeSwitchClientHandler {
 
     private final String password;
     private final IProtocolListener listener;
 
-    public OutboundClientHandler(String password, IProtocolListener listener) {
+    public DefaultFreeSwitchClientHandler(String password, IProtocolListener listener) {
         this.password = password;
         this.listener = listener;
     }
@@ -46,7 +46,7 @@ public class OutboundClientHandler extends AbstractOutboundClientHandler {
     protected void handleAuthRequest(ChannelHandlerContext ctx) {
         log.debug("Auth requested, sending [auth {}]", "*****");
         AuthCommand auth = new AuthCommand(password);
-        FreeSwitchMessage response = sendSyncSingleLineCommand(ctx.getChannel(), auth.toString());
+        FreeSwitchMessage response = sendSyncCommand(ctx.getChannel(), auth.toString());
         log.debug("Auth response [{}]", response);
         if (response.contentType().equals(HeaderValue.COMMAND_REPLY)) {
             CommandReply commandResponse = new CommandReply("auth " + password,

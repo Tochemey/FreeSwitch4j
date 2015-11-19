@@ -13,32 +13,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.freeswitch.inbound;
+package io.freeswitch.outbound;
 
 import io.freeswitch.ExecutionHandler;
 import io.freeswitch.codec.FreeSwitchDecoder;
+import org.jboss.netty.channel.ChannelHandler;
+import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
+import org.jboss.netty.handler.codec.string.StringEncoder;
 import org.jboss.netty.handler.execution.OrderedMemoryAwareThreadPoolExecutor;
 
 /**
  * @author Arsene Tochemey GANDOTE
  */
-public abstract class ChannelTcpFactory implements ChannelPipelineFactory {
+public class DefaultFreeSwitchClientPipelineFactory implements ChannelPipelineFactory {
 
-    public org.jboss.netty.channel.ChannelPipeline getPipeline() throws Exception {
-        org.jboss.netty.channel.ChannelPipeline pipeline = Channels.pipeline();
-        pipeline.addLast("encoder", new org.jboss.netty.handler.codec.string.StringEncoder());
-        pipeline.addLast("decoder", new FreeSwitchDecoder(8192, true));
+    private final ChannelHandler handler;
+
+    public DefaultFreeSwitchClientPipelineFactory(ChannelHandler handler) {
+        this.handler = handler;
+    }
+
+    public ChannelPipeline getPipeline() throws Exception {
+        ChannelPipeline pipeline = Channels.pipeline();
+        pipeline.addLast("encoder", new StringEncoder());
+        pipeline.addLast("decoder", new FreeSwitchDecoder(8192));
         // Add an executor to ensure separate thread for each upstream message from here
         pipeline.addLast("executor", new ExecutionHandler(
                 new OrderedMemoryAwareThreadPoolExecutor(16, 1048576, 1048576)));
 
         // now the inbound client logic
-        pipeline.addLast("clientHandler", buildHandler());
+        pipeline.addLast("clientHandler", handler);
 
         return pipeline;
     }
 
-    protected abstract AbstractInboundSessionHandler buildHandler();
 }

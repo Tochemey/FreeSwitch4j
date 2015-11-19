@@ -52,7 +52,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author Arsene Tochemey GANDOTE
  */
-public class OutboundClient {
+public class FreeSwitchClient {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -157,7 +157,7 @@ public class OutboundClient {
      */
     public FreeSwitchMessage api(String command, String arg) {
         checkConnected();
-        OutboundClientHandler handler = (OutboundClientHandler) channel.getPipeline().getLast();
+        DefaultFreeSwitchClientHandler handler = (DefaultFreeSwitchClientHandler) channel.getPipeline().getLast();
 
         StringBuilder sb = new StringBuilder();
         if (!StringUtils.isEmpty(command)) {
@@ -174,7 +174,7 @@ public class OutboundClient {
         }
 
         ApiCommand api = new ApiCommand(sb.toString());
-        return handler.sendSyncSingleLineCommand(channel, api.toString());
+        return handler.sendSyncCommand(channel, api.toString());
     }
 
     /**
@@ -192,7 +192,7 @@ public class OutboundClient {
      */
     public UUID bgApi(String command, String arg) {
         checkConnected();
-        OutboundClientHandler handler = (OutboundClientHandler) channel.getPipeline().getLast();
+        DefaultFreeSwitchClientHandler handler = (DefaultFreeSwitchClientHandler) channel.getPipeline().getLast();
         if (StringUtils.isEmpty(command)) {
             // Here no command is set to be executed.
             return null;
@@ -221,13 +221,13 @@ public class OutboundClient {
     /**
      * Close the socket connection
      *
-     * @return a {@link CommandResponse} with the server's response.
+     * @return a {@link CommandReply} with the server's response.
      */
     public CommandReply close() {
         checkConnected();
-        OutboundClientHandler handler = (OutboundClientHandler) channel.getPipeline().getLast();
+        DefaultFreeSwitchClientHandler handler = (DefaultFreeSwitchClientHandler) channel.getPipeline().getLast();
         ExitCommand exit = new ExitCommand();
-        FreeSwitchMessage response = handler.sendSyncSingleLineCommand(channel,
+        FreeSwitchMessage response = handler.sendSyncCommand(channel,
                 exit.toString());
 
         return new CommandReply(exit.toString(), response);
@@ -264,8 +264,8 @@ public class OutboundClient {
                         Executors.newCachedThreadPool()));
 
         // Add ESL handler
-        OutboundClientHandler handler = new OutboundClientHandler(password, protocolListener);
-        bootstrap.setPipelineFactory(new OutboundPipelineFactory(handler));
+        DefaultFreeSwitchClientHandler handler = new DefaultFreeSwitchClientHandler(password, protocolListener);
+        bootstrap.setPipelineFactory(new DefaultFreeSwitchClientPipelineFactory(handler));
 
         // Make the connection attempt.
         ChannelFuture future = bootstrap.connect(new InetSocketAddress(host, port));
@@ -327,7 +327,7 @@ public class OutboundClient {
         }
 
         checkConnected();
-        OutboundClientHandler handler = (OutboundClientHandler) channel.getPipeline().getLast();
+        DefaultFreeSwitchClientHandler handler = (DefaultFreeSwitchClientHandler) channel.getPipeline().getLast();
         StringBuilder sb = new StringBuilder();
         if (format != null && !format.isEmpty()) {
             sb.append(format);
@@ -342,22 +342,22 @@ public class OutboundClient {
             return null;
         }
         EventCommand event = new EventCommand(sb.toString());
-        FreeSwitchMessage response = handler.sendSyncSingleLineCommand(channel,
+        FreeSwitchMessage response = handler.sendSyncCommand(channel,
                 event.toString());
         return new CommandReply(event.toString(), response);
     }
 
     /**
-     * Send a {@link SendMsg} command to FreeSWITCH. This client requires that
-     * the {@link SendMsg} has a call UUID parameter.
+     * Send a {@link SendMsgCommand} command to FreeSWITCH. This client requires that
+     * the {@link SendMsgCommand} has a call UUID parameter.
      *
-     * @param sendMsg a {@link SendMsg} with call UUID
+     * @param sendMsg a {@link SendMsgCommand} with call UUID
      * @return a {@link CommandReply} with the server's response.
      */
     public CommandReply execute(SendMsgCommand sendMsg) {
         checkConnected();
-        OutboundClientHandler handler = (OutboundClientHandler) channel.getPipeline().getLast();
-        FreeSwitchMessage response = handler.sendSyncSingleLineCommand(channel,
+        DefaultFreeSwitchClientHandler handler = (DefaultFreeSwitchClientHandler) channel.getPipeline().getLast();
+        FreeSwitchMessage response = handler.sendSyncCommand(channel,
                 sendMsg.toString());
 
         return new CommandReply(sendMsg.toString(), response);
@@ -383,7 +383,7 @@ public class OutboundClient {
      */
     public CommandReply filter(String eventHeader, String valueToFilter) {
         checkConnected();
-        OutboundClientHandler handler = (OutboundClientHandler) channel.getPipeline().getLast();
+        DefaultFreeSwitchClientHandler handler = (DefaultFreeSwitchClientHandler) channel.getPipeline().getLast();
         StringBuilder sb = new StringBuilder();
         if (eventHeader != null && !eventHeader.isEmpty()) {
             sb.append(eventHeader);
@@ -398,14 +398,14 @@ public class OutboundClient {
         }
 
         FilterCommand filter = new FilterCommand(sb.toString());
-        FreeSwitchMessage response = handler.sendSyncSingleLineCommand(channel,
+        FreeSwitchMessage response = handler.sendSyncCommand(channel,
                 filter.toString());
         return new CommandReply(filter.toString(), response);
     }
 
     /**
      * Delete an event filter from the current set of event filters on this
-     * connection. See {@link OutboundClient.addEventFilter}
+     * connection.
      *
      * @param eventHeader   to remove
      * @param valueToFilter to remove
@@ -413,7 +413,7 @@ public class OutboundClient {
      */
     public CommandReply filterDelete(String eventHeader, String valueToFilter) {
         checkConnected();
-        OutboundClientHandler handler = (OutboundClientHandler) channel.getPipeline().getLast();
+        DefaultFreeSwitchClientHandler handler = (DefaultFreeSwitchClientHandler) channel.getPipeline().getLast();
         StringBuilder sb = new StringBuilder();
         if (eventHeader != null && !eventHeader.isEmpty()) {
             sb.append("delete ");
@@ -428,7 +428,7 @@ public class OutboundClient {
         }
 
         FilterCommand filter = new FilterCommand(sb.toString());
-        FreeSwitchMessage response = handler.sendSyncSingleLineCommand(channel,
+        FreeSwitchMessage response = handler.sendSyncCommand(channel,
                 filter.toString());
         return new CommandReply(filter.toString(), response);
     }
@@ -440,9 +440,9 @@ public class OutboundClient {
      */
     public CommandReply noevents() {
         checkConnected();
-        OutboundClientHandler handler = (OutboundClientHandler) channel.getPipeline().getLast();
+        DefaultFreeSwitchClientHandler handler = (DefaultFreeSwitchClientHandler) channel.getPipeline().getLast();
         NoEventsCommand noevents = new NoEventsCommand();
-        FreeSwitchMessage response = handler.sendSyncSingleLineCommand(channel,
+        FreeSwitchMessage response = handler.sendSyncCommand(channel,
                 noevents.toString());
         return new CommandReply(noevents.toString(), response);
     }
@@ -454,8 +454,8 @@ public class OutboundClient {
      */
     public CommandReply nolog() {
         checkConnected();
-        OutboundClientHandler handler = (OutboundClientHandler) channel.getPipeline().getLast();
-        FreeSwitchMessage response = handler.sendSyncSingleLineCommand(channel,
+        DefaultFreeSwitchClientHandler handler = (DefaultFreeSwitchClientHandler) channel.getPipeline().getLast();
+        FreeSwitchMessage response = handler.sendSyncCommand(channel,
                 new NologCommand().toString());
 
         return new CommandReply("nolog", response);
@@ -469,9 +469,9 @@ public class OutboundClient {
      */
     public CommandReply setLogLevel(LogLevels level) {
         checkConnected();
-        OutboundClientHandler handler = (OutboundClientHandler) channel.getPipeline().getLast();
+        DefaultFreeSwitchClientHandler handler = (DefaultFreeSwitchClientHandler) channel.getPipeline().getLast();
         LogCommand log = new LogCommand(level);
-        FreeSwitchMessage response = handler.sendSyncSingleLineCommand(channel,
+        FreeSwitchMessage response = handler.sendSyncCommand(channel,
                 log.toString());
 
         return new CommandReply(log.toString(), response);
